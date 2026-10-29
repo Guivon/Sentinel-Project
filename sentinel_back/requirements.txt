@@ -1,0 +1,4 @@
+flask
+pyjwt[crypto]
+gunicorn
+requests
