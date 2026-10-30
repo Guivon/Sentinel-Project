@@ -82,7 +82,7 @@ def _regras(texto):
         if re.search(padrao, t):
             pontos += peso
             motivos.append(nome)
-    # Dinheiro exigido sob ameaça (extorsão / falso sequestro)
+            
     if "Ameaça de violência ou extorsão" in motivos and re.search(
         r"\bpix\b|transfer[eê]ncia|dinheiro|dep[oó]sito|\br\$", t
     ):
@@ -174,7 +174,6 @@ def analisar_texto(app_origem, texto):
         fonte = "regras"
     else:
         pontuacao = _limitar(PESO_IA * ia["pontuacao"] + (1 - PESO_IA) * regras["pontuacao"])
-        # Se a IA tem alta certeza, as regras (que podem não conhecer o golpe) não diluem a nota
         if ia["pontuacao"] >= 80:
             pontuacao = max(pontuacao, ia["pontuacao"])
         motivos = list(ia["motivos"])
