@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sentinel_acessibilidade_descricao">O Sentinel lê o texto visível na tela, apenas no seu aparelho, para avisar quando encontrar sinais de golpe. Nada do que aparece na tela é enviado para a internet. Somente trechos suspeitos ficam salvos no histórico do aparelho.</string>
+</resources>
