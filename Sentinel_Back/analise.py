@@ -47,8 +47,17 @@ Marque "suspeito": false apenas quando a mensagem for claramente legítima e sem
 
 Baseie-se nas evidências do conteúdo; se faltar informação, diga isso nos motivos. \
 Nunca afirme certeza absoluta: use "confianca" entre 0.0 e 1.0 (acima de 0.8 só com vários sinais claros).
+Dê também "pontuacao", um inteiro de 0 a 100 com o nível de risco da mensagem, usando esta escala \
+(use a faixa toda, não repita sempre o mesmo valor):
+- 0 a 20: mensagem normal, sem sinais;
+- 21 a 39: pouco indício, só um detalhe estranho;
+- 40 a 64: duvidosa, alguns sinais mas sem prova clara;
+- 65 a 84: golpe provável, vários sinais claros;
+- 85 a 100: golpe evidente, com sinais graves combinados (pedido de dinheiro ou dados + urgência + \
+marca falsa, ou ameaça grave).
 Responda SOMENTE com JSON, sem markdown, neste formato:
-{"suspeito": true|false, "confianca": 0.0-1.0, "tipo_de_golpe": "nome do golpe provável ou nenhum", \
+{"suspeito": true|false, "pontuacao": 0-100, "confianca": 0.0-1.0, \
+"tipo_de_golpe": "nome do golpe provável ou nenhum", \
 "motivos": ["curto", "curto"], "recomendacao": "uma frase curta"}
 Motivos em português, no máximo 4, cada um com menos de 12 palavras."""
 
@@ -166,28 +175,44 @@ def _via_bedrock(app_origem, texto, arquivo):
     return _extrair_json(bruto)
 
 
-def _normalizar(r):
+def _normalizar(r, score_app=None):
     suspeito = r.get("suspeito", False)
     if isinstance(suspeito, str):
         suspeito = suspeito.strip().lower() == "true"
+    suspeito = bool(suspeito)
     try:
         confianca = max(0.0, min(1.0, float(r.get("confianca", 0.0))))
     except (TypeError, ValueError):
         confianca = 0.0
     motivos = [str(m)[:120] for m in list(r.get("motivos") or [])[:4]]
-    # Campos que o app Android lê (nivel e pontuacao), derivados da decisão da IA.
-    if suspeito:
-        nivel = "alto" if confianca >= 0.6 else "medio"
-        pontuacao = max(int(round(confianca * 100)), 65 if nivel == "alto" else 30)
-    else:
-        nivel = "baixo"
-        pontuacao = 20 if motivos else 0
 
+    # Pontuação da IA (0-100). Se ela não mandou, deriva da decisão.
+    try:
+        ia = max(0, min(100, int(round(float(r.get("pontuacao"))))))
+    except (TypeError, ValueError):
+        ia = int(round(confianca * 100)) if suspeito else (20 if motivos else 0)
+
+    # Score local do app só pode SUBIR a pontuação (média entre os dois).
+    try:
+        local = max(0, min(100, int(score_app))) if score_app is not None else None
+    except (TypeError, ValueError):
+        local = None
+    pontuacao = ia
+    if local is not None and local > ia:
+        pontuacao = int(round((ia + local) / 2))
+
+    # Coerência com a decisão da IA.
+    if suspeito:
+        pontuacao = max(pontuacao, 30)
+    elif local is None or local < 65:
+        pontuacao = min(pontuacao, 29)
+
+    nivel = "alto" if pontuacao >= 65 else "medio" if pontuacao >= 30 else "baixo"
     return {
-        "suspeito": bool(suspeito),
+        "suspeito": suspeito,
         "confianca": confianca,
         "nivel": nivel,
-        "pontuacao": min(pontuacao, 100),
+        "pontuacao": pontuacao,
         "motivos": motivos,
         "tipo_de_golpe": str(r.get("tipo_de_golpe") or "")[:80],
         "recomendacao": str(r.get("recomendacao") or "")[:300],
@@ -254,9 +279,11 @@ def _salvar(user_id, app_origem, texto, r):
 @token_required
 def analisar():
     arquivo = None
+    score_app = None
     if request.mimetype == "multipart/form-data":
         texto = (request.form.get("texto") or "").strip()
         app_origem = (request.form.get("app") or "").strip()
+        score_app = request.form.get("score_app")
         f = request.files.get("arquivo")
         if f:
             dados = f.read(LIMITE_ARQUIVO + 1)
@@ -270,6 +297,7 @@ def analisar():
         dados = request.get_json(silent=True) or {}
         texto = (dados.get("texto") or "").strip()
         app_origem = (dados.get("app") or "").strip()
+        score_app = dados.get("score_app")
 
     if not texto and not arquivo:
         return jsonify({"erro": "Envie texto e/ou arquivo"}), 400
@@ -283,6 +311,6 @@ def analisar():
 
     if DEBUG_LOG:
         print("SAIDA:", r)
-    resp = _normalizar(r)
+    resp = _normalizar(r, score_app)
     _salvar(g.user_id, app_origem, texto or None, resp)
     return jsonify(resp), 200
