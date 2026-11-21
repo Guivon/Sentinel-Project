@@ -65,8 +65,18 @@ def _regras(texto):
         motivos.append("Pede dados sensíveis")
     if tem_link and re.search(r"pix|transferência|boleto|fatura", t):
         motivos.append("Assunto financeiro com link")
+    ameaca = bool(re.search(
+        r"\bmat(ar|o|ou|ei|aram)\b|sequestr\w*|assassin\w*|espanc\w*|esfaque\w*|"
+        r"\bvou (te |lhe )?(roubar|assaltar|invadir|bater|quebrar|queimar)|"
+        r"\b(sua|tua|seu|teu) (fam[ií]lia|filh[oa]s?)\b.*\b(mat|roub|sequestr|pagar)",
+        t,
+    ))
+    if ameaca:
+        motivos.append("Ameaça de violência ou crime")
     confianca = min(0.15 + 0.2 * len(motivos), 0.9) if motivos else 0.05
-    return {"suspeito": len(motivos) >= 2, "confianca": confianca, "motivos": motivos}
+    if ameaca:
+        confianca = max(confianca, 0.8)
+    return {"suspeito": len(motivos) >= 2 or ameaca, "confianca": confianca, "motivos": motivos}
 
 
 def _via_claude(app_origem, texto):
