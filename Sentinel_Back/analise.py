@@ -158,9 +158,19 @@ def _normalizar(r):
     except (TypeError, ValueError):
         confianca = 0.0
     motivos = [str(m)[:120] for m in list(r.get("motivos") or [])[:4]]
+    # Campos que o app Android lê (nivel e pontuacao), derivados da decisão da IA.
+    if suspeito:
+        nivel = "alto" if confianca >= 0.6 else "medio"
+        pontuacao = max(int(round(confianca * 100)), 65 if nivel == "alto" else 30)
+    else:
+        nivel = "baixo"
+        pontuacao = 20 if motivos else 0
+
     return {
         "suspeito": bool(suspeito),
         "confianca": confianca,
+        "nivel": nivel,
+        "pontuacao": min(pontuacao, 100),
         "motivos": motivos,
         "tipo_de_golpe": str(r.get("tipo_de_golpe") or "")[:80],
         "recomendacao": str(r.get("recomendacao") or "")[:300],
