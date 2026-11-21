@@ -159,16 +159,22 @@ def analisar_conteudo(app_origem, texto, arquivo=None):
     """Tenta a IA; se falhar e houver texto, cai nas regras simples."""
     if PROVEDOR_IA == "bedrock":
         try:
-            return _via_bedrock(app_origem, texto, arquivo)
+            r = _via_bedrock(app_origem, texto, arquivo)
+            r["fonte"] = "ia"
+            return r
         except Exception as e:
-            print("Falha na IA (Bedrock):", e)
+            print("Falha na IA (Bedrock):", repr(e))
     elif PROVEDOR_IA == "anthropic" and ANTHROPIC_API_KEY and not arquivo:
         try:
-            return _via_claude(app_origem, texto)
+            r = _via_claude(app_origem, texto)
+            r["fonte"] = "ia"
+            return r
         except Exception as e:
-            print("Falha na IA (Anthropic):", e)
+            print("Falha na IA (Anthropic):", repr(e))
     if texto:
-        return _regras(texto)
+        r = _regras(texto)
+        r["fonte"] = "regras"
+        return r
     return None
 
 
