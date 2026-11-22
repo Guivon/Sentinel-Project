@@ -11,7 +11,7 @@ from config import supabase_url
 
 logger = logging.getLogger("sentinel.auth")
 
-auth_bp = Blueprint("autenticacao", __name__, url_prefix="/auth")
+auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 _jwks: PyJWKClient | None = None
 

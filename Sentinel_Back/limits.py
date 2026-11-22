@@ -30,5 +30,7 @@ class WindowLimiter:
         if now - self._last_cleanup < self.window_s:
             return
         self._last_cleanup = now
-        for key in [k for k, queue in self._calls.items() if not queue or now - queue[-1] >= self.window_s]:
+        for key in [
+            k for k, queue in self._calls.items() if not queue or now - queue[-1] >= self.window_s
+        ]:
             del self._calls[key]

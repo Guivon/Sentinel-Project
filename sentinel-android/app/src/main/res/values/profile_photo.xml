@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="google_continue">Continuar com Google</string>
+    <string name="google_or">ou</string>
+    <string name="google_not_configured">Login com Google ainda não está configurado neste app.</string>
+    <string name="photo_change">Trocar foto de perfil</string>
+    <string name="photo_remove">Remover foto</string>
+    <string name="photo_save_failed">Não foi possível usar essa imagem.</string>
+    <string name="photo_hint">Toque na foto para trocar</string>
+    <string name="google_waiting">Abrindo as contas Google…</string>
+    <string name="google_retry">Tentar de novo</string>
+    <string name="google_cancelled">Login com Google cancelado.</string>
+</resources>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="call_source">Ligação (%1$s)</string>
+    <string name="call_source_hidden">Ligação (número oculto)</string>
+    <string name="call_snippet">Ligação recebida de %1$s</string>
+    <string name="call_snippet_hidden">Ligação recebida de número oculto</string>
+    <string name="call_sign_hidden">Número oculto ou privado</string>
+    <string name="call_sign_spoofed">A operadora não conseguiu confirmar que o número é verdadeiro (possível número falsificado)</string>
+    <string name="call_sign_international">Ligação internacional de número que você não conhece</string>
+    <string name="call_sign_telemarketing">Ligação de telemarketing ou cobrança</string>
+    <string name="call_sign_unknown">Número que não está nos seus contatos</string>
+    <string name="call_sign_claims_official">Diz ser de %1$s, mas a operadora não confirmou o número (possível falsificação)</string>
+    <string name="call_official_claim">Número de %1$s (identidade não verificada)</string>
+
+    <string name="calls_protection_active">Identificação de ligações ativa</string>
+    <string name="calls_protection_inactive">Identificação de ligações desativada</string>
+    <string name="calls_protection_description">Avisa quando uma ligação parece golpe (número oculto, falsificado ou internacional). O Sentinel não ouve a conversa nem grava a ligação.</string>
+    <string name="calls_unsupported">Este recurso precisa do Android 10 ou mais novo.</string>
+
+    <string name="tutorial_calls_title">Ativar identificação de ligações</string>
+    <string name="tutorial_calls_action">Continuar</string>
+    <string name="tutorial_calls_tip">O Sentinel só vê o número de quem liga. Ele não escuta, não grava e não bloqueia ligações. Para desativar, vá em Configurações > Apps > Apps padrão > App de identificação de chamadas.</string>
+    <string name="mock_calls_dialog_text">Definir o Sentinel como seu app de identificação de chamadas e spam?</string>
+    <string name="mock_calls_caption_1">Toque em \"Definir como padrão\" (ou \"Sentinel\", dependendo do celular).</string>
+    <string name="mock_calls_set_default">Definir como padrão</string>
+    <string name="mock_calls_contacts_text">Permitir que o Sentinel acesse seus contatos? Isso evita avisos sobre pessoas que você conhece.</string>
+    <string name="mock_calls_caption_2">Se o Android perguntar sobre contatos, toque em \"Permitir\".</string>
+
+    <string name="sms_protection_active">Leitura de SMS ativa</string>
+    <string name="sms_protection_inactive">Leitura de SMS desativada</string>
+    <string name="sms_protection_description">Analisa os SMS que chegam para achar golpes. O texto é analisado primeiro no seu aparelho e não fica guardado no servidor.</string>
+    <string name="tutorial_sms_title">Ativar leitura de SMS</string>
+    <string name="tutorial_sms_action">Continuar</string>
+    <string name="tutorial_sms_tip">Para desativar depois, abra Configurações > Apps > Sentinel > Permissões > SMS e escolha \"Não permitir\". O botão Desativar do Sentinel leva você direto para lá.</string>
+    <string name="mock_sms_dialog_text">Permitir que o Sentinel receba e veja mensagens SMS?</string>
+    <string name="mock_sms_caption_1">Toque em \"Permitir\" na janela que o Android mostrar.</string>
+    <string name="mock_sms_perm_screen_title">Permissões do app</string>
+    <string name="mock_sms_perm_row">SMS</string>
+    <string name="mock_sms_caption_2">Se a janela não aparecer, abra Permissões e toque em \"SMS\".</string>
+</resources>

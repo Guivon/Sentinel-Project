@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="verify_title">Confirme seu e-mail</string>
+    <string name="verify_description">Enviamos um código para %1$s. Digite o código abaixo para ativar sua conta.</string>
+    <string name="verify_code_label">Código do e-mail</string>
+    <string name="verify_button">Confirmar</string>
+    <string name="verify_resend">Reenviar código</string>
+    <string name="verify_resend_wait">Reenviar código em %1$ds</string>
+    <string name="verify_code_resent">Código reenviado. Confira sua caixa de entrada.</string>
+    <string name="verify_spam_hint">Não chegou? Olhe também a pasta de spam ou lixo eletrônico.</string>
+</resources>

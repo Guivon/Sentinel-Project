@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tips_title">Dicas de segurança</string>
+    <string name="tips_subtitle">Hábitos simples que evitam a maioria dos golpes.</string>
+    <string name="tips_footer_title">Caiu em um golpe?</string>
+    <string name="tips_footer_body">Avise o banco na hora pelo canal oficial, troque suas senhas, registre um boletim de ocorrência e use o Registrar Golpe do Sentinel para alertar outras pessoas.</string>
+
+    <string name="tip_urgency_title">Desconfie de urgência</string>
+    <string name="tip_urgency_body">Golpistas criam pressa: \"sua conta será bloqueada hoje\", \"última chance\". Pare, respire e confirme por um canal oficial antes de agir.</string>
+    <string name="tip_codes_title">Nunca passe códigos</string>
+    <string name="tip_codes_body">Códigos de verificação recebidos por SMS, e-mail ou WhatsApp são pessoais. Nenhuma empresa ou pessoa de confiança precisa deles.</string>
+    <string name="tip_bank_title">O banco não pede sua senha</string>
+    <string name="tip_bank_body">Banco não liga nem manda mensagem pedindo senha, token, cartão ou para \"transferir para uma conta segura\". Se pedirem, é golpe.</string>
+    <string name="tip_links_title">Confira links e remetentes</string>
+    <string name="tip_links_body">Não toque em links de mensagens inesperadas, principalmente os encurtados. Digite o endereço do site oficial ou use o aplicativo.</string>
+    <string name="tip_pix_title">Confira antes de fazer um Pix</string>
+    <string name="tip_pix_body">Veja o nome do destinatário na tela de confirmação. Se alguém \"da família\" pedir dinheiro de um número novo, ligue para a pessoa antes de pagar.</string>
+    <string name="tip_two_step_title">Ative a verificação em duas etapas</string>
+    <string name="tip_two_step_body">Ligue a confirmação em duas etapas no WhatsApp, e-mail e bancos. Assim, mesmo que descubram sua senha, não entram na conta.</string>
+    <string name="tip_apps_title">Instale apps só das lojas oficiais</string>
+    <string name="tip_apps_body">Não instale arquivos APK recebidos por mensagem nem apps de acesso remoto a pedido de desconhecidos. Eles dão controle total do seu celular.</string>
+    <string name="tip_offers_title">Ofertas boas demais são armadilha</string>
+    <string name="tip_offers_body">Prêmios, sorteios, descontos enormes e empregos fáceis que pedem dados ou pagamento antecipado costumam ser golpe.</string>
+    <string name="tip_official_title">Na dúvida, use o canal oficial</string>
+    <string name="tip_official_body">Desligue e ligue você mesmo para o número que está no cartão, no aplicativo ou no site oficial da empresa. Nunca use o número que a mensagem mandou.</string>
+    <string name="tip_passwords_title">Use senhas fortes e diferentes</string>
+    <string name="tip_passwords_body">Não repita a mesma senha em vários serviços e evite datas e nomes. Um gerenciador de senhas ajuda a manter todas diferentes.</string>
+</resources>

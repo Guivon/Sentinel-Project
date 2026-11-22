@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_notifications_title">Ativar leitura de notificações</string>
+    <string name="tutorial_notifications_action">Abrir configurações</string>
+    <string name="tutorial_notifications_tip">Se a opção estiver cinza: vá em Configurações > Apps > Sentinel, toque nos três pontinhos no canto e escolha \"Permitir configurações restritas\". Depois repita os passos.</string>
+    <string name="tutorial_gmail_title">Conectar o Gmail</string>
+    <string name="tutorial_gmail_action">Escolher conta</string>
+    <string name="tutorial_gmail_tip">Você pode desconectar a qualquer momento em myaccount.google.com > Segurança > Apps com acesso à conta.</string>
+    <string name="tutorial_screen_title">Ativar leitura de tela</string>
+    <string name="tutorial_screen_action">Abrir acessibilidade</string>
+    <string name="tutorial_screen_tip">O texto da tela é analisado só no seu aparelho e não é enviado ao servidor. Se a opção estiver cinza, use \"Permitir configurações restritas\" em Configurações > Apps > Sentinel.</string>
+
+    <string name="tutorial_swipe_hint">Deslize para o lado para ver os passos</string>
+    <string name="tutorial_disclaimer">Ilustração. A tela do seu celular pode ser um pouco diferente.</string>
+    <string name="tutorial_step_counter">Passo %1$d de %2$d</string>
+
+    <string name="mock_ok">Permitir</string>
+    <string name="mock_cancel">Cancelar</string>
+    <string name="mock_deny">Negar</string>
+    <string name="mock_sentinel">Sentinel</string>
+    <string name="mock_app_whatsapp">WhatsApp</string>
+    <string name="mock_app_chrome">Chrome</string>
+
+    <string name="mock_notif_screen_title">Acesso às notificações</string>
+    <string name="mock_notif_caption_1">Toque em \"Sentinel\" na lista de apps.</string>
+    <string name="mock_notif_row_allow">Permitir acesso às notificações</string>
+    <string name="mock_notif_caption_2">Ligue \"Permitir acesso às notificações\".</string>
+    <string name="mock_notif_dialog_text">Permitir que o Sentinel acesse as notificações?</string>
+    <string name="mock_notif_caption_3">Se o Android perguntar, toque em \"Permitir\". Depois volte para o Sentinel.</string>
+
+    <string name="mock_gmail_screen_title">Escolher uma conta</string>
+    <string name="mock_gmail_account">seunome@gmail.com</string>
+    <string name="mock_gmail_add_account">Adicionar outra conta</string>
+    <string name="mock_gmail_caption_1">Toque na conta Google do e-mail que você quer proteger.</string>
+    <string name="mock_gmail_dialog_text">O Sentinel quer ver seus e-mails (somente leitura)</string>
+    <string name="mock_gmail_caption_2">Se o Google pedir, toque em \"Permitir\". O Sentinel só lê, nunca envia nem apaga e-mails.</string>
+
+    <string name="mock_screen_title_accessibility">Acessibilidade</string>
+    <string name="mock_screen_row_talkback">TalkBack</string>
+    <string name="mock_screen_row_installed">Apps instalados</string>
+    <string name="mock_screen_row_captions">Legendas</string>
+    <string name="mock_screen_caption_1">Toque em \"Apps instalados\" (em alguns celulares aparece \"Serviços baixados\").</string>
+    <string name="mock_screen_row_service">Sentinel Leitura de Tela</string>
+    <string name="mock_screen_row_other">Outro serviço</string>
+    <string name="mock_screen_caption_2">Toque em \"Sentinel Leitura de Tela\".</string>
+    <string name="mock_screen_row_use">Usar Sentinel Leitura de Tela</string>
+    <string name="mock_screen_caption_3">Ligue o interruptor.</string>
+    <string name="mock_screen_dialog_text">Permitir que o Sentinel use este serviço de acessibilidade?</string>
+    <string name="mock_screen_caption_4">Toque em \"Permitir\". Depois volte para o Sentinel.</string>
+</resources>

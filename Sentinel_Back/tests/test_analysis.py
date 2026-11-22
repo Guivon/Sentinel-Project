@@ -56,12 +56,16 @@ def test_app_score_only_raises_result():
 
 
 def test_ai_says_ok_but_app_detects_serious_threat_raises_to_medium():
-    n = _normalize({"suspeito": False, "pontuacao": 10, "confianca": 0.5, "motivos": []}, app_score=80)
+    n = _normalize(
+        {"suspeito": False, "pontuacao": 10, "confianca": 0.5, "motivos": []}, app_score=80
+    )
     assert n["nivel"] == "medio"
 
 
 def test_normalize_accepts_odd_types_without_breaking():
-    n = _normalize({"suspeito": "true", "confianca": "abc", "pontuacao": None, "motivos": "um motivo"})
+    n = _normalize(
+        {"suspeito": "true", "confianca": "abc", "pontuacao": None, "motivos": "um motivo"}
+    )
     assert n["suspeito"] is True
     assert n["motivos"] == ["um motivo"]
     assert 0.0 <= n["confianca"] <= 1.0
@@ -109,15 +113,28 @@ def test_missing_token_returns_401(api_client):
 
 
 def test_invalid_token_returns_401(api_client):
-    r = api_client.post("/api/analisar", json={"texto": "oi"}, headers={"Authorization": "Bearer lixo"})
+    r = api_client.post(
+        "/api/analisar", json={"texto": "oi"}, headers={"Authorization": "Bearer lixo"}
+    )
     assert r.status_code == 401
 
 
 def test_analyzes_text_and_returns_app_fields(api_client, header):
-    r = api_client.post("/api/analisar", json={"texto": "vou te matar", "app": "SMS"}, headers=header)
+    r = api_client.post(
+        "/api/analisar", json={"texto": "vou te matar", "app": "SMS"}, headers=header
+    )
     assert r.status_code == 200
     payload = r.get_json()
-    for field in ("suspeito", "confianca", "nivel", "pontuacao", "motivos", "tipo_de_golpe", "recomendacao", "fonte"):
+    for field in (
+        "suspeito",
+        "confianca",
+        "nivel",
+        "pontuacao",
+        "motivos",
+        "tipo_de_golpe",
+        "recomendacao",
+        "fonte",
+    ):
         assert field in payload
     assert payload["suspeito"] is True and payload["fonte"] == "regras"
 
@@ -134,11 +151,15 @@ def test_non_object_body_returns_400(api_client, header):
 
 
 def test_empty_returns_400(api_client, header):
-    assert api_client.post("/api/analisar", json={"texto": "   "}, headers=header).status_code == 400
+    assert (
+        api_client.post("/api/analisar", json={"texto": "   "}, headers=header).status_code == 400
+    )
 
 
 def test_invalid_app_score_is_ignored(api_client, header):
-    r = api_client.post("/api/analisar", json={"texto": "oi", "pontuacao_app": "abc"}, headers=header)
+    r = api_client.post(
+        "/api/analisar", json={"texto": "oi", "pontuacao_app": "abc"}, headers=header
+    )
     assert r.status_code == 200
 
 
@@ -166,7 +187,10 @@ def test_request_limit_per_user(api_client, header, monkeypatch):
     from limits import WindowLimiter
 
     monkeypatch.setattr(analysis, "limiter", WindowLimiter(maximum=2, window_s=60))
-    codes = [api_client.post("/api/analisar", json={"texto": "oi"}, headers=header).status_code for _ in range(3)]
+    codes = [
+        api_client.post("/api/analisar", json={"texto": "oi"}, headers=header).status_code
+        for _ in range(3)
+    ]
     assert codes == [200, 200, 429]
     r = api_client.post("/api/analisar", json={"texto": "oi"}, headers=header)
     assert "Retry-After" in r.headers
@@ -215,6 +239,38 @@ def test_legacy_score_app_name_still_accepted(api_client, header, monkeypatch):
         "_via_bedrock",
         lambda *_a: {"suspeito": True, "pontuacao": 40, "confianca": 0.6, "motivos": ["x"]},
     )
-    legacy = api_client.post("/api/analisar", json={"texto": "oi", "score_app": 80}, headers=header).get_json()
-    new = api_client.post("/api/analisar", json={"texto": "oi", "pontuacao_app": 80}, headers=header).get_json()
+    legacy = api_client.post(
+        "/api/analisar", json={"texto": "oi", "score_app": 80}, headers=header
+    ).get_json()
+    new = api_client.post(
+        "/api/analisar", json={"texto": "oi", "pontuacao_app": 80}, headers=header
+    ).get_json()
     assert legacy["pontuacao"] == new["pontuacao"] == 60
+
+
+def test_provider_fallback_uses_anthropic_when_bedrock_fails(monkeypatch):
+    import analysis
+
+    def boom(*_args):
+        raise ValueError("bedrock down")
+
+    monkeypatch.setattr(analysis, "AI_PROVIDER", "bedrock")
+    monkeypatch.setattr(analysis, "ANTHROPIC_API_KEY", "key")
+    monkeypatch.setattr(analysis, "_via_bedrock", boom)
+    monkeypatch.setattr(
+        analysis, "_via_claude", lambda *_a: {"suspeito": False, "confianca": 0.1, "motivos": []}
+    )
+    result = analysis.analyze_content("sms", "olá")
+    assert result is not None
+    assert result["fonte"] == "ia"
+
+
+def test_validate_environment_rejects_unknown_provider(monkeypatch):
+    import pytest
+
+    from config import validate_environment
+
+    monkeypatch.setenv("SUPABASE_URL", "https://x.supabase.co")
+    monkeypatch.setenv("PROVEDOR_IA", "gemini")
+    with pytest.raises(RuntimeError):
+        validate_environment()

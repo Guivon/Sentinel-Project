@@ -1,0 +1,10 @@
+# Copie este arquivo para "local.properties" (que NÃO vai para o Git) e preencha.
+# Supabase: Project Settings > API
+SUPABASE_URL=https://SEU-PROJETO.supabase.co
+SUPABASE_KEY=sua_chave_publishable_ou_anon
+
+# Login com Google: ID do cliente OAuth do tipo "Aplicativo da Web" (Google Cloud Console)
+GOOGLE_WEB_CLIENT_ID=seu-id-web.apps.googleusercontent.com
+
+# Opcional: endereço do back end (padrão: o do Render)
+# BACKEND_URL=https://sentinel-project-eqr2.onrender.com

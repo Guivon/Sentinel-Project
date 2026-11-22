@@ -1,0 +1,29 @@
+# Build e arquivos gerados
+/build/
+/*/build/
+.gradle/
+.kotlin/
+
+# IDE e configurações locais
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+local.properties
+
+# Binários de saída Android
+*.apk
+*.aab
+*.dex
+*.class
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Logs e capturas
+*.log
+captures/
+.externalNativeBuild
+.cxx
