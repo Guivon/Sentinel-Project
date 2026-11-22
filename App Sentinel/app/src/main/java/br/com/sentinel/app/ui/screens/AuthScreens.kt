@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -37,7 +38,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -46,6 +46,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.sentinel.app.R
@@ -136,46 +137,53 @@ fun SentinelWelcomeScreen(
     onRegister: () -> Unit,
     onGoogleClick: () -> Unit = {}
 ) {
-    Box(
+    BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
             .background(SentinelYellow)
     ) {
-        WelcomeRibbons()
+        WelcomeRibbons(screenWidth = maxWidth, screenHeight = maxHeight)
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
+                .padding(horizontal = 24.dp, vertical = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(32.dp))
-            SentinelLogo(modifier = Modifier.size(260.dp))
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                SentinelLogo(modifier = Modifier.fillMaxSize())
+            }
             WelcomeTexts()
+            Spacer(modifier = Modifier.height(20.dp))
             WelcomeActions(onSignIn, onRegister, onGoogleClick)
+            Spacer(modifier = Modifier.height(16.dp))
             WelcomeFooter()
         }
     }
 }
 
 @Composable
-private fun BoxScope.WelcomeRibbons() {
-    val configuration = LocalConfiguration.current
-    val screenHeight = configuration.screenHeightDp.dp
+private fun BoxScope.WelcomeRibbons(screenWidth: Dp, screenHeight: Dp) {
+    val ribbonSize = screenWidth * 0.28f
 
     SentinelCornerRibbon(
         modifier = Modifier
-            .size(115.dp)
+            .size(ribbonSize)
             .align(Alignment.BottomStart)
-            .offset(x = (-20).dp, y = (-160).dp)
+            .offset(x = -(screenWidth * 0.05f), y = -(screenHeight * 0.2f))
     )
 
     SentinelCornerRibbonTop(
         modifier = Modifier
-            .size(115.dp)
+            .size(ribbonSize)
             .align(Alignment.TopEnd)
             .graphicsLayer(scaleX = -1f)
-            .offset(x = (-20).dp, y = screenHeight * 0.35f)
+            .offset(x = -(screenWidth * 0.05f), y = screenHeight * 0.33f)
     )
 }
 
@@ -183,9 +191,7 @@ private fun BoxScope.WelcomeRibbons() {
 private fun WelcomeTexts() {
     Column(
         horizontalAlignment = Alignment.Start,
-        modifier = Modifier
-            .fillMaxWidth()
-            .offset(y = (-50).dp)
+        modifier = Modifier.fillMaxWidth()
     ) {
         Text(
             text = stringResource(R.string.bem_vindo_ao_sentinel),
@@ -213,9 +219,7 @@ private fun WelcomeActions(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxWidth()
-            .offset(y = (-70).dp)
+        modifier = Modifier.fillMaxWidth()
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -260,7 +264,7 @@ private fun WelcomeActions(
 private fun WelcomeFooter() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(bottom = 16.dp)
+        modifier = Modifier.fillMaxWidth()
     ) {
         HorizontalDivider(
             modifier = Modifier.padding(bottom = 12.dp),

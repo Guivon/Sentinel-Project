@@ -218,7 +218,7 @@ fun SentinelLearnScreen(onBack: () -> Unit) {
                 modifier = Modifier.size(30.dp)
             )
             Spacer(modifier = Modifier.width(12.dp))
-            Column {
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = stringResource(R.string.seu_nivel_de_protecao_alto),
                     color = Color.White,

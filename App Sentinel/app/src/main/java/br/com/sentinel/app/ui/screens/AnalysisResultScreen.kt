@@ -241,7 +241,7 @@ private fun RiskSummaryCard(risk: RiskPresentation, score: Int) {
                 )
             }
             Spacer(modifier = Modifier.width(12.dp))
-            Column {
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = risk.title,
                     color = risk.color,

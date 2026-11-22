@@ -104,7 +104,7 @@ internal fun ProtectionStatusCard() {
             )
         }
         Spacer(modifier = Modifier.width(16.dp))
-        Column {
+        Column(modifier = Modifier.weight(1f)) {
             Text(text = title, color = Color.DarkGray, fontSize = 18.sp, fontWeight = FontWeight.Bold)
             Text(text = description, color = Color.DarkGray, fontSize = 13.sp)
         }

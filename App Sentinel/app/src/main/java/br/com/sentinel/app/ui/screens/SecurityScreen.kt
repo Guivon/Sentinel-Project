@@ -1,5 +1,7 @@
 package br.com.sentinel.app.ui.screens
 
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.IntrinsicSize
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -134,15 +136,21 @@ fun SentinelSecurityScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(IntrinsicSize.Min),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 SentinelReportCard(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight(),
                     onClick = { showReportDialog = true }
                 )
                 SentinelReportCard(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight(),
                     title = stringResource(R.string.meu_historico),
                     description = stringResource(R.string.veja_as_mensagens_que_o_sentinel_ja_an),
                     icon = Icons.Outlined.History,

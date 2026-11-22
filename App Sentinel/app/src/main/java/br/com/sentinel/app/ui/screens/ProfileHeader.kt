@@ -1,5 +1,6 @@
 package br.com.sentinel.app.ui.screens
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -64,7 +65,7 @@ internal fun ProfileHeader(userName: String, userEmail: String) {
         picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
 
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         Box(modifier = Modifier.clickable { pickPhoto() }) {
             UserAvatar(
                 size = 88.dp,
@@ -87,7 +88,7 @@ internal fun ProfileHeader(userName: String, userEmail: String) {
             }
         }
         Spacer(modifier = Modifier.width(16.dp))
-        Column {
+        Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = userName.ifBlank { stringResource(R.string.usuario) },
                 color = Color.White,

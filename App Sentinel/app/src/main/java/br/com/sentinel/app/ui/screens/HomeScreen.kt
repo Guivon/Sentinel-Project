@@ -1,5 +1,6 @@
 package br.com.sentinel.app.ui.screens
 
+import androidx.compose.foundation.layout.BoxWithConstraints
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -79,13 +80,13 @@ fun SentinelHomeScreen(
             )
         }
     ) { innerPadding ->
-        Box(
+        BoxWithConstraints(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
                 .background(SentinelBlueBg)
         ) {
-            HomeBackgroundShapes()
+            HomeBackgroundShapes(screenWidth = maxWidth, screenHeight = maxHeight)
 
             Column(
                 modifier = Modifier

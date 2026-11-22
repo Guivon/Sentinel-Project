@@ -81,7 +81,7 @@ fun SentinelAlertItem(title: String, subtitle: String) {
             modifier = Modifier.size(24.dp)
         )
         Spacer(modifier = Modifier.width(12.dp))
-        Column {
+        Column(modifier = Modifier.weight(1f)) {
             Text(title, color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.Bold)
             Text(subtitle, color = Color.White.copy(alpha = 0.8f), fontSize = 12.sp)
         }

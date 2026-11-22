@@ -1,5 +1,7 @@
 package br.com.sentinel.app.ui.components
 
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -35,30 +37,33 @@ fun SentinelQuickCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(
+    Column(
         modifier = modifier
             .background(Color.White, RoundedCornerShape(16.dp))
             .clickable { onClick() }
-            .padding(12.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .padding(12.dp)
     ) {
-        Box(
-            modifier = Modifier
-                .size(44.dp)
-                .background(iconBackground, RoundedCornerShape(12.dp)),
-            contentAlignment = Alignment.Center
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Icon(imageVector = icon, contentDescription = null, tint = SentinelDarkBlueButton)
+            Box(
+                modifier = Modifier
+                    .size(44.dp)
+                    .background(iconBackground, RoundedCornerShape(12.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(imageVector = icon, contentDescription = null, tint = SentinelDarkBlueButton)
+            }
+            Icon(
+                imageVector = Icons.Default.ChevronRight,
+                contentDescription = null,
+                tint = SentinelLightBlueCard
+            )
         }
-        Spacer(modifier = Modifier.width(7.dp))
-        Column(modifier = Modifier.weight(1f)) {
-            Text(title, color = SentinelTextDark, fontSize = 14.sp, fontWeight = FontWeight.Bold)
-            Text(subtitle, color = SentinelLightBlueCard, fontSize = 11.sp)
-        }
-        Icon(
-            imageVector = Icons.Default.ChevronRight,
-            contentDescription = null,
-            tint = SentinelLightBlueCard
-        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(title, color = SentinelTextDark, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+        Text(subtitle, color = SentinelLightBlueCard, fontSize = 12.sp)
     }
 }
