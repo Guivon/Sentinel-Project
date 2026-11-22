@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import br.com.sentinel.app.data.SentinelState
 import br.com.sentinel.app.domain.AutoAnalysis
 import br.com.sentinel.app.domain.OfficialContacts
+import br.com.sentinel.app.domain.SenderContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -53,7 +54,8 @@ class SentinelNotificationListener : NotificationListenerService() {
                     backendApp = "WhatsApp",
                     content = content,
                     officialInstitution = officialInstitution,
-                    extraSigns = extraSigns
+                    extraSigns = extraSigns,
+                    sender = SenderContext(heading, false, null)
                 )
             } catch (e: Exception) {
                 Log.e("Sentinel", "Erro ao analisar notificação: ${e.message}")

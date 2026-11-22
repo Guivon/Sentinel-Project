@@ -10,13 +10,21 @@ import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import br.com.sentinel.app.data.AlertStatus
 import br.com.sentinel.app.data.SentinelState
+import br.com.sentinel.app.domain.AutoAnalysis
+import br.com.sentinel.app.domain.BehaviorMonitor
 import br.com.sentinel.app.domain.RiskLevel
 import br.com.sentinel.app.domain.ScamDetector
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
 class SentinelAccessibilityService : AccessibilityService() {
 
     private val analysisThread = HandlerThread("sentinel-tela").apply { start() }
     private val handler = Handler(analysisThread.looper)
+    private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     @Volatile
     private var pending = false
@@ -37,6 +45,7 @@ class SentinelAccessibilityService : AccessibilityService() {
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         val packageName = event?.packageName?.toString() ?: return
+        if (packageName != this.packageName) trackBehavior(event)
         if (ignore(packageName)) return
         if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
             handler.post(process)
@@ -48,12 +57,23 @@ class SentinelAccessibilityService : AccessibilityService() {
         }
     }
 
+    private fun trackBehavior(event: AccessibilityEvent) {
+        when (event.eventType) {
+            AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED -> BehaviorMonitor.onTyping()
+            AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED -> BehaviorMonitor.onWindowChange()
+            else -> return
+        }
+        val report = BehaviorMonitor.check() ?: return
+        serviceScope.launch { AutoAnalysis.processBehavior(applicationContext, report) }
+    }
+
     override fun onInterrupt() {
         handler.removeCallbacks(process)
     }
 
     override fun onDestroy() {
         handler.removeCallbacks(process)
+        serviceScope.cancel()
         analysisThread.quitSafely()
         instance = null
         super.onDestroy()
@@ -81,6 +101,7 @@ class SentinelAccessibilityService : AccessibilityService() {
                 }
             }
             if (analyzed) SentinelState.recordAnalysis()
+            BehaviorMonitor.onScreenText(blocks)
 
             val name = appName(packageName)
             suspiciousItems

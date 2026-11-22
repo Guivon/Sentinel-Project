@@ -36,4 +36,20 @@ class ScamDetectorTest {
     fun `accents do not interfere`() {
         assertTrue(ScamDetector.analyze("TRANSFERÊNCIA URGENTE").score > 0)
     }
+
+    @Test
+    fun `generic time words alone do not raise the score`() {
+        assertEquals(RiskLevel.SAFE, ScamDetector.analyze("Te ligo hoje, já saí de casa agora").level)
+    }
+
+    @Test
+    fun `stacked categories do not saturate the score`() {
+        val result = ScamDetector.analyze("Clique no link e confirme a senha, urgente, ou perca a conta")
+        assertTrue(result.score < 90)
+    }
+
+    @Test
+    fun `payment request is flagged`() {
+        assertTrue(ScamDetector.analyze("Faça o pix para liberar").asksPayment)
+    }
 }

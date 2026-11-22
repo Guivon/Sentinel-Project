@@ -6,7 +6,9 @@ import android.content.Intent
 import android.provider.Telephony
 import android.util.Log
 import br.com.sentinel.app.domain.AutoAnalysis
+import br.com.sentinel.app.domain.ContactsLookup
 import br.com.sentinel.app.domain.OfficialContacts
+import br.com.sentinel.app.domain.SenderContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -35,7 +37,12 @@ class SmsReceiver : BroadcastReceiver() {
                         source = "SMS ($sender)",
                         backendApp = "SMS",
                         content = content.toString(),
-                        officialInstitution = OfficialContacts.identify(sender)
+                        officialInstitution = OfficialContacts.identify(sender),
+                        sender = SenderContext(
+                            sender,
+                            ContactsLookup.isKnown(appCtx, sender),
+                            OfficialContacts.identify(sender)
+                        )
                     )
                 }
             } catch (e: Exception) {

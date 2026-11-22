@@ -3,6 +3,7 @@ package br.com.sentinel.app.data
 import android.util.Log
 import br.com.sentinel.app.BuildConfig
 import br.com.sentinel.app.domain.RiskLevel
+import br.com.sentinel.app.domain.SenderContext
 import io.github.jan.supabase.auth.auth
 import io.ktor.client.plugins.timeout
 import io.ktor.client.request.bearerAuth
@@ -32,7 +33,8 @@ object SentinelApi {
         val aiScore: Int = 0,
         val level: String = "baixo",
         val scamType: String = "",
-        val recommendation: String = ""
+        val recommendation: String = "",
+        val cnpjs: List<String> = emptyList()
     ) {
         fun appLevel(): RiskLevel = when (level) {
             "critico", "alto" -> RiskLevel.SUSPICIOUS
@@ -51,7 +53,8 @@ object SentinelApi {
         token: String? = null,
         appScore: Int? = null,
         timeoutMs: Int = 60_000,
-        file: UploadFile? = null
+        file: UploadFile? = null,
+        sender: SenderContext? = null
     ): BackendResponse? = withContext(Dispatchers.IO) {
         try {
             val auth = SupabaseProvider.client.auth
@@ -62,12 +65,14 @@ object SentinelApi {
                 token ?: auth.currentAccessTokenOrNull(),
                 appScore,
                 timeoutMs,
-                file
+                file,
+                sender
             )
 
             if (httpResult.statusCode == 401 && token == null) {
                 runCatching { auth.refreshCurrentSession() }
-                httpResult = callBackend(app, content, auth.currentAccessTokenOrNull(), appScore, timeoutMs, file)
+                httpResult =
+                    callBackend(app, content, auth.currentAccessTokenOrNull(), appScore, timeoutMs, file, sender)
             }
 
             if (httpResult.statusCode == 200) {
@@ -90,6 +95,8 @@ object SentinelApi {
         if (reasons != null) {
             for (index in 0 until reasons.length()) reasonsList.add(reasons.getString(index))
         }
+        val cnpjArray = json.optJSONArray("cnpjs")
+        val cnpjs = if (cnpjArray == null) emptyList() else List(cnpjArray.length()) { cnpjArray.getString(it) }
         val suspicious = json.optBoolean("suspeito", false)
         val confidence = json.optDouble("confianca", 0.0)
 
@@ -108,7 +115,8 @@ object SentinelApi {
             aiScore = aiScore,
             level = level,
             scamType = json.optString("tipo_de_golpe", ""),
-            recommendation = json.optString("recomendacao", "")
+            recommendation = json.optString("recomendacao", ""),
+            cnpjs = cnpjs
         )
     }
 
@@ -118,7 +126,8 @@ object SentinelApi {
         token: String?,
         appScore: Int?,
         timeoutMs: Int,
-        file: UploadFile?
+        file: UploadFile?,
+        sender: SenderContext?
     ): HttpResult {
         val response = HttpClientProvider.client.post(analysisUrl) {
             if (!token.isNullOrBlank()) bearerAuth(token)
@@ -134,6 +143,11 @@ object SentinelApi {
                     put("app", app)
                     put("texto", content)
                     if (score != null) put("pontuacao_app", score)
+                    if (sender != null) {
+                        put("remetente", sender.id)
+                        sender.inContacts?.let { put("em_contatos", it) }
+                        sender.officialInstitution?.let { put("canal_oficial", it) }
+                    }
                 }
                 setBody(body.toString())
             } else {
@@ -144,6 +158,11 @@ object SentinelApi {
                             append("app", app)
                             append("texto", content)
                             if (score != null) append("pontuacao_app", score.toString())
+                            if (sender != null) {
+                                append("remetente", sender.id)
+                                sender.inContacts?.let { append("em_contatos", it.toString()) }
+                                sender.officialInstitution?.let { append("canal_oficial", it) }
+                            }
                             append(
                                 "arquivo",
                                 file.bytes,

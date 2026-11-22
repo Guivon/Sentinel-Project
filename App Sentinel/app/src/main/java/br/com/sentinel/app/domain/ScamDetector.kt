@@ -81,9 +81,11 @@ object ScamDetector {
                 "agora",
                 "imediato",
                 "imediatamente",
-                "hoje",
+                "agora mesmo",
+                "hoje mesmo",
+                "ainda hoje",
+                "prazo final",
                 "rapido",
-                "ja",
                 "ultima chance",
                 "nao desligue",
                 "fique na linha"
@@ -111,12 +113,15 @@ object ScamDetector {
 
     private const val NOTIFY_THRESHOLD = 30
     private const val SUSPICIOUS_THRESHOLD = 65
+    private const val COMBO_BONUS = 20
+    private val DIMINISHING_FACTORS = doubleArrayOf(1.0, 0.6, 0.4, 0.25)
 
     data class DetectionResult(
         val level: RiskLevel,
         val score: Int,
         val reasons: List<String>,
-        val strongSignal: Boolean = false
+        val strongSignal: Boolean = false,
+        val asksPayment: Boolean = false
     )
 
     private fun normalizeText(content: String): String {
@@ -133,13 +138,13 @@ object ScamDetector {
         val normalizedContent = content?.let { normalizeText(it) } ?: ""
 
         val found = categories.filter { it.appears(normalizedContent) }
-        var scoreText = found.sumOf { it.weightValue }
+        var scoreText = diminishingSum(found.map { it.weightValue })
         val reasonsText = found.map { it.name }.toMutableList()
 
         val hasMoney = found.any { it.name == CAT_MONEY }
         val hasThreat = found.any { it.name == CAT_COERCION || it.name == CAT_VIOLENCE }
         if (hasMoney && hasThreat) {
-            scoreText += 25
+            scoreText += COMBO_BONUS
             reasonsText.add("Dinheiro exigido sob ameaça")
         }
 
@@ -154,6 +159,12 @@ object ScamDetector {
         }
         if (strong && level == RiskLevel.SAFE) level = RiskLevel.DOUBTFUL
 
-        return DetectionResult(level, totalScore.coerceAtMost(100), reasons, strong)
+        return DetectionResult(level, totalScore.coerceAtMost(100), reasons, strong, hasMoney)
     }
+
+    private fun diminishingSum(weights: List<Int>): Int = weights
+        .sortedDescending()
+        .withIndex()
+        .sumOf { (index, weight) -> weight * DIMINISHING_FACTORS[minOf(index, DIMINISHING_FACTORS.lastIndex)] }
+        .toInt()
 }

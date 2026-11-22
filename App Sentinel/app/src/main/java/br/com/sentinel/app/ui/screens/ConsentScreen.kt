@@ -75,6 +75,7 @@ private fun consentSections(): List<ConsentSection> = listOf(
             stringResource(R.string.mensagens_que_voce_analisa_o_texto_que),
             stringResource(R.string.mensagens_recebidas_sms_notificacoes_d),
             stringResource(R.string.texto_da_tela_se_voce_ativar_a_leitura),
+            stringResource(R.string.privacy_behavior_text),
             stringResource(R.string.contatos_usados_apenas_para_saber_se_o),
             stringResource(R.string.registro_de_cada_analise_no_servidor_s),
             stringResource(R.string.relatos_de_golpe_se_voce_usar_registra),

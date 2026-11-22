@@ -34,7 +34,13 @@ def test_alerts_without_service_key_return_empty_list(api_client, header, monkey
 
 
 def test_alerts_return_rows_from_supabase(community_client, header, monkeypatch):
-    rows = [{"titulo": "Falso Pix", "regiao": "São Paulo - SP", "criado_em": "2026-11-21T10:00:00+00:00"}]
+    rows = [
+        {
+            "titulo": "Falso Pix",
+            "regiao": "São Paulo - SP",
+            "criado_em": "2026-11-21T10:00:00+00:00",
+        }
+    ]
     monkeypatch.setattr(community.requests, "get", lambda *a, **k: FakeResponse(rows))
     returned = community_client.get("/api/alertas", headers=header)
     assert returned.status_code == 200
@@ -50,7 +56,9 @@ def test_report_saves_and_returns_201(community_client, header, monkeypatch):
 
     monkeypatch.setattr(community.requests, "post", fake_post)
     returned = community_client.post(
-        "/api/denuncias", headers=header, json={"descricao": "Ligaram dizendo ser do banco", "regiao": "Recife - PE"}
+        "/api/denuncias",
+        headers=header,
+        json={"descricao": "Ligaram dizendo ser do banco", "regiao": "Recife - PE"},
     )
     assert returned.status_code == 201
     assert sent["user_id"] == "usuario-teste"
@@ -63,7 +71,9 @@ def test_report_with_short_description_returns_400(community_client, header):
 
 
 def test_report_with_wrong_type_returns_400(community_client, header):
-    returned = community_client.post("/api/denuncias", headers=header, json={"descricao": 123456789012})
+    returned = community_client.post(
+        "/api/denuncias", headers=header, json={"descricao": 123456789012}
+    )
     assert returned.status_code == 400
 
 

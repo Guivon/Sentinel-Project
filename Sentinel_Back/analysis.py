@@ -8,6 +8,7 @@ import requests
 from botocore.exceptions import BotoCoreError, ClientError
 from flask import Blueprint, Response, g, jsonify, request
 
+import cnpj as cnpj_check
 from auth import require_token
 from config import supabase_url
 from limits import WindowLimiter
@@ -26,6 +27,8 @@ AWS_REGION = os.environ.get("AWS_REGION", "us-east-2")
 BEDROCK_MODEL_ID = os.environ.get("BEDROCK_MODEL_ID", "us.amazon.nova-pro-v1:0")
 FILE_LIMIT = int(os.environ.get("LIMITE_ARQUIVO_BYTES", "4000000"))
 
+CNPJ_RISK_SCORE = 75
+CNPJ_WARNING_BONUS = 15
 TEXT_LIMIT = 4000
 APP_LIMIT = 60
 
@@ -67,6 +70,15 @@ não responder e, se houver risco real, procurar a polícia (190).
 Bancos e lojas reais nunca pedem para comprar algo ou transferir dinheiro para resolver uma \
 compra não reconhecida.
 Uma marca real citada (ex.: loja ou banco conhecido) NÃO torna a mensagem confiável.
+Quando houver <contexto>, use-o: se o remetente não está nos contatos e a mensagem pede \
+pagamento, Pix, boleto ou dados, ou se afirma ser um banco/empresa cujo canal oficial não \
+corresponde ao remetente informado, trate como forte sinal de golpe. Se o contexto disser que o \
+remetente corresponde a um canal oficial, isso NÃO prova que a mensagem é verdadeira (números \
+podem ser falsificados). Se a origem for "Comportamento", a mensagem descreve só contagens de \
+digitação e troca de telas depois de uma mensagem suspeita, e links que imitam bancos: avalie se \
+isso indica que a pessoa está sendo induzida por um golpista; sinais isolados e fracos não \
+bastam. Se houver CNPJ no conteúdo (texto, imagem ou documento, como beneficiário de boleto), \
+liste-os em "cnpjs" apenas com números.
 Marque "suspeito": false apenas quando a mensagem for claramente legítima e sem nenhum desses \
 sinais.
 
@@ -86,13 +98,14 @@ marca falsa, ou ameaça grave).
 Responda SOMENTE com JSON, sem markdown, neste formato:
 {"suspeito": true|false, "pontuacao": 0-100, "confianca": 0.0-1.0, \
 "tipo_de_golpe": "nome do golpe provável ou nenhum", \
-"motivos": ["curto", "curto"], "recomendacao": "uma frase curta"}
+"motivos": ["curto", "curto"], "recomendacao": "uma frase curta", \
+"cnpjs": ["somente números, se houver"]}
 Motivos em português, no máximo 4, cada um com menos de 12 palavras."""
 
 
 def _strip_delimiters(text: str) -> str:
 
-    return re.sub(r"</?\s*mensagem\s*>", "[mensagem]", text, flags=re.IGNORECASE)
+    return re.sub(r"</?\s*(mensagem|contexto)\s*>", "[mensagem]", text, flags=re.IGNORECASE)
 
 
 def _clean_app(app_origin: str) -> str:
@@ -100,9 +113,30 @@ def _clean_app(app_origin: str) -> str:
     return re.sub(r"\s+", " ", app_origin).strip()[:APP_LIMIT]
 
 
-def _build_message(app_origin: str, text: str) -> str:
+def _clean_context(sender: dict[str, Any] | None) -> str:
+
+    if not sender:
+        return ""
+    sender_id = re.sub(r"[<>\s]+", " ", str(sender.get("remetente") or "")).strip()[:60]
+    if not sender_id:
+        return ""
+    contacts = sender.get("em_contatos")
+    known = "sim" if contacts is True else "não" if contacts is False else "não verificado"
+    official = re.sub(r"[<>\s]+", " ", str(sender.get("canal_oficial") or "")).strip()[:60]
+    official_line = official or "nenhum"
+    return (
+        "<contexto>\n"
+        f"Remetente: {sender_id}\n"
+        f"Está nos contatos: {known}\n"
+        f"Corresponde ao canal oficial de: {official_line}\n"
+        "</contexto>\n"
+    )
+
+
+def _build_message(app_origin: str, text: str, sender: dict[str, Any] | None = None) -> str:
 
     detail = f"App de origem: {_clean_app(app_origin) or 'desconhecido'}\n"
+    detail += _clean_context(sender)
     if text:
         return detail + f"<mensagem>\n{_strip_delimiters(text)}\n</mensagem>"
     return detail + "Analise o conteúdo anexado."
@@ -184,7 +218,7 @@ def _extract_json(raw: str) -> dict[str, Any]:
     return result
 
 
-def _via_claude(app_origin: str, text: str) -> dict[str, Any]:
+def _via_claude(app_origin: str, text: str, sender: dict[str, Any] | None) -> dict[str, Any]:
 
     response = requests.post(
         "https://api.anthropic.com/v1/messages",
@@ -197,7 +231,7 @@ def _via_claude(app_origin: str, text: str) -> dict[str, Any]:
             "model": ANTHROPIC_MODEL,
             "max_tokens": 500,
             "system": SYSTEM_PROMPT,
-            "messages": [{"role": "user", "content": _build_message(app_origin, text)}],
+            "messages": [{"role": "user", "content": _build_message(app_origin, text, sender)}],
         },
         timeout=20,
     )
@@ -225,7 +259,9 @@ def _bedrock_client() -> Any:
     return _bedrock
 
 
-def _via_bedrock(app_origin: str, text: str, file: tuple[str, str, bytes] | None) -> dict[str, Any]:
+def _via_bedrock(
+    app_origin: str, text: str, file: tuple[str, str, bytes] | None, sender: dict[str, Any] | None
+) -> dict[str, Any]:
 
     content: list[dict[str, Any]] = []
     if file:
@@ -236,7 +272,7 @@ def _via_bedrock(app_origin: str, text: str, file: tuple[str, str, bytes] | None
             content.append(
                 {"document": {"format": fmt, "name": "documento", "source": {"bytes": payload}}}
             )
-    content.append({"text": _build_message(app_origin, text)})
+    content.append({"text": _build_message(app_origin, text, sender)})
 
     response = _bedrock_client().converse(
         modelId=BEDROCK_MODEL_ID,
@@ -252,16 +288,20 @@ def _via_bedrock(app_origin: str, text: str, file: tuple[str, str, bytes] | None
 
 
 def _run_provider(
-    provider: str, app_origin: str, text: str, file: tuple[str, str, bytes] | None
+    provider: str,
+    app_origin: str,
+    text: str,
+    file: tuple[str, str, bytes] | None,
+    sender: dict[str, Any] | None,
 ) -> dict[str, Any] | None:
     if provider == "bedrock":
         try:
-            return _via_bedrock(app_origin, text, file)
+            return _via_bedrock(app_origin, text, file, sender)
         except BEDROCK_ERRORS as error:
             logger.warning("AI failure (Bedrock): %r", error)
     elif provider == "anthropic" and ANTHROPIC_API_KEY and not file:
         try:
-            return _via_claude(app_origin, text)
+            return _via_claude(app_origin, text, sender)
         except ANTHROPIC_ERRORS as error:
             logger.warning("AI failure (Anthropic): %r", error)
     return None
@@ -273,10 +313,13 @@ def _provider_order() -> list[str]:
 
 
 def analyze_content(
-    app_origin: str, text: str, file: tuple[str, str, bytes] | None = None
+    app_origin: str,
+    text: str,
+    file: tuple[str, str, bytes] | None = None,
+    sender: dict[str, Any] | None = None,
 ) -> dict[str, Any] | None:
     for provider in _provider_order():
-        result = _run_provider(provider, app_origin, text, file)
+        result = _run_provider(provider, app_origin, text, file, sender)
         if result is not None:
             result["fonte"] = "ia"
             return result
@@ -328,6 +371,25 @@ def _normalize(result: dict[str, Any], app_score: int | None = None) -> dict[str
         "recomendacao": str(result.get("recomendacao") or "")[:300],
         "fonte": str(result.get("fonte") or "desconhecida"),
     }
+
+
+def _apply_cnpj(normalized: dict[str, Any], checks: list[dict[str, Any]]) -> None:
+
+    normalized["cnpjs"] = [{"cnpj": item["cnpj"], "situacao": item["situacao"]} for item in checks]
+    alerts = [alert for item in checks for alert in item["alertas"] if "agora" not in alert]
+    if not alerts:
+        return
+    normalized["motivos"] = (alerts + normalized["motivos"])[:4]
+    if cnpj_check.is_risky(checks):
+        normalized["suspeito"] = True
+        normalized["pontuacao"] = max(normalized["pontuacao"], CNPJ_RISK_SCORE)
+        normalized["nivel"] = "alto"
+        normalized["confianca"] = max(normalized["confianca"], 0.8)
+    else:
+        normalized["pontuacao"] = min(100, normalized["pontuacao"] + CNPJ_WARNING_BONUS)
+        if normalized["nivel"] == "baixo" and normalized["pontuacao"] >= 30:
+            normalized["nivel"] = "medio"
+            normalized["suspeito"] = True
 
 
 def _supabase_headers() -> dict[str, str]:
@@ -409,10 +471,15 @@ def analyze() -> tuple[Response, int]:
     if not text and not file:
         return _error("Envie texto e/ou arquivo", 400)
 
-    result = analyze_content(app_origin, text, file)
+    sender = {key: fields.get(key) for key in ("remetente", "em_contatos", "canal_oficial")}
+    if isinstance(sender["em_contatos"], str):
+        sender["em_contatos"] = {"true": True, "false": False}.get(sender["em_contatos"].lower())
+
+    result = analyze_content(app_origin, text, file, sender)
     if result is None:
         return _error("Não foi possível analisar agora. Tente novamente.", 503)
 
     normalized = _normalize(result, app_score)
+    _apply_cnpj(normalized, cnpj_check.verify_all(text, result.get("cnpjs")))
     _save(g.user_id, app_origin, normalized)
     return jsonify(normalized), 200
