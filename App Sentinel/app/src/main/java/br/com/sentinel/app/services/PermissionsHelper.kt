@@ -29,12 +29,10 @@ object PermissionsHelper {
         }
     }
 
-    fun isSmsPermissionGranted(context: Context): Boolean {
-        return ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.RECEIVE_SMS
-        ) == PackageManager.PERMISSION_GRANTED
-    }
+    fun isSmsPermissionGranted(context: Context): Boolean = ContextCompat.checkSelfPermission(
+        context,
+        Manifest.permission.RECEIVE_SMS
+    ) == PackageManager.PERMISSION_GRANTED
 
     fun isCallScreeningRoleHeld(context: Context): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return false
@@ -56,5 +54,4 @@ object PermissionsHelper {
             false
         }
     }
-
 }

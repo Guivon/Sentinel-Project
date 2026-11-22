@@ -43,9 +43,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import br.com.sentinel.app.R
 import br.com.sentinel.app.data.AuthRepository
-import androidx.lifecycle.viewmodel.compose.viewModel
 import br.com.sentinel.app.ui.AlertsViewModel
 import br.com.sentinel.app.ui.ProtectionPermissions
 import br.com.sentinel.app.ui.SentinelScreen
@@ -68,11 +68,7 @@ fun SentinelProfileScreenPreview() {
 private enum class ProfileSection { ACCESSIBILITY, PRIVACY, NOTIFICATIONS, ABOUT }
 
 @Composable
-fun SentinelProfileScreen(
-    onLogout: () -> Unit,
-    onBack: () -> Unit = {},
-    onNavigate: (SentinelScreen) -> Unit = {}
-) {
+fun SentinelProfileScreen(onLogout: () -> Unit, onBack: () -> Unit = {}, onNavigate: (SentinelScreen) -> Unit = {}) {
     var expanded by remember { mutableStateOf(emptySet<ProfileSection>()) }
     var userName by remember { mutableStateOf("") }
     var userEmail by remember { mutableStateOf("") }

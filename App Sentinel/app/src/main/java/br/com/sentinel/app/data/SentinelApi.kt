@@ -93,7 +93,13 @@ object SentinelApi {
         val suspicious = json.optBoolean("suspeito", false)
         val confidence = json.optDouble("confianca", 0.0)
 
-        val level = if (json.has("nivel")) json.optString("nivel", "baixo") else if (suspicious) "alto" else "baixo"
+        val level = if (json.has("nivel")) {
+            json.optString("nivel", "baixo")
+        } else if (suspicious) {
+            "alto"
+        } else {
+            "baixo"
+        }
         val aiScore = if (json.has("pontuacao")) json.optInt("pontuacao", 0) else (confidence * 100).toInt()
         return BackendResponse(
             suspicious = suspicious,

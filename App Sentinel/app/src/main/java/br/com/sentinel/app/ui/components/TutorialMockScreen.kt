@@ -144,8 +144,10 @@ private fun MockDialog(step: MockStep, pulse: Float) {
                 color = Color.Black
             )
             Spacer(modifier = Modifier.height(12.dp))
-            Row(horizontalArrangement = Arrangement.End,
-                modifier = Modifier.fillMaxWidth()) {
+            Row(
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 step.rows.drop(1).forEachIndexed { offset, label ->
                     val highlighted = offset + 1 == step.highlight
                     val borderModifier = if (highlighted) {

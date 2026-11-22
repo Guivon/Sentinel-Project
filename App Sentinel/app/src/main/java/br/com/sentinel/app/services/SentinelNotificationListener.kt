@@ -63,7 +63,8 @@ class SentinelNotificationListener : NotificationListenerService() {
 
     private fun isInContacts(nameOrNumber: String): Boolean {
         val allowed = ContextCompat.checkSelfPermission(
-            this, Manifest.permission.READ_CONTACTS
+            this,
+            Manifest.permission.READ_CONTACTS
         ) == PackageManager.PERMISSION_GRANTED
         if (!allowed) return false
 
@@ -74,7 +75,9 @@ class SentinelNotificationListener : NotificationListenerService() {
                     ContactsContract.PhoneLookup.CONTENT_FILTER_URI.buildUpon()
                         .appendPath(nameOrNumber).build(),
                     arrayOf(ContactsContract.PhoneLookup.DISPLAY_NAME),
-                    null, null, null
+                    null,
+                    null,
+                    null
                 )
             } else {
                 contentResolver.query(

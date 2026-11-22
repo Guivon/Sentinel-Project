@@ -43,15 +43,16 @@ import br.com.sentinel.app.ui.theme.SentinelWarningYellow
 internal fun SentinelHistoryAlertCard(alert: Alert) {
     val (label, backgroundColor, textColor, iconImage) = when (alert.status) {
         AlertStatus.CONFIRMED_LOCAL, AlertStatus.CONFIRMED_AI ->
-            if (alert.level == RiskLevel.DOUBTFUL)
+            if (alert.level == RiskLevel.DOUBTFUL) {
                 listOf(
                     stringResource(R.string.suspeito),
                     SentinelWarningYellow,
                     SentinelWarningDark,
                     Icons.Outlined.Warning
                 )
-            else
+            } else {
                 listOf(stringResource(R.string.alto_risco), SentinelRiskRed, Color.White, Icons.Outlined.Warning)
+            }
         AlertStatus.ANALYZING ->
             listOf(stringResource(R.string.analisando), SentinelWarningYellow, SentinelWarningDark, Icons.Outlined.Info)
         AlertStatus.OFFICIAL ->

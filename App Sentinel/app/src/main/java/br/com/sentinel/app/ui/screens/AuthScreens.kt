@@ -132,11 +132,7 @@ fun SentinelAuthFlow(onLoginSuccess: () -> Unit) {
 }
 
 @Composable
-fun SentinelWelcomeScreen(
-    onSignIn: () -> Unit,
-    onRegister: () -> Unit,
-    onGoogleClick: () -> Unit = {}
-) {
+fun SentinelWelcomeScreen(onSignIn: () -> Unit, onRegister: () -> Unit, onGoogleClick: () -> Unit = {}) {
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
@@ -212,11 +208,7 @@ private fun WelcomeTexts() {
 }
 
 @Composable
-private fun WelcomeActions(
-    onSignIn: () -> Unit,
-    onRegister: () -> Unit,
-    onGoogleClick: () -> Unit
-) {
+private fun WelcomeActions(onSignIn: () -> Unit, onRegister: () -> Unit, onGoogleClick: () -> Unit) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
@@ -287,12 +279,7 @@ private fun WelcomeFooter() {
 }
 
 @Composable
-fun SentinelLoginScreen(
-    onBack: () -> Unit,
-    onRegister: () -> Unit,
-    onSuccess: () -> Unit,
-    onGoogleClick: () -> Unit
-) {
+fun SentinelLoginScreen(onBack: () -> Unit, onRegister: () -> Unit, onSuccess: () -> Unit, onGoogleClick: () -> Unit) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
@@ -441,8 +428,11 @@ fun SentinelRegisterScreen(
             isPassword = true
         )
         SentinelTextField(
-            confirm, { confirm = it }, stringResource(R.string.confirmar_senha),
-            KeyboardType.Password, isPassword = true,
+            confirm,
+            { confirm = it },
+            stringResource(R.string.confirmar_senha),
+            KeyboardType.Password,
+            isPassword = true,
             isError = confirm.isNotEmpty() && confirm != password
         )
 
@@ -463,8 +453,11 @@ fun SentinelRegisterScreen(
                     isLoading = false
                 }
             },
-            enabled = name.isNotBlank() && email.isNotBlank() && password.length >= 6
-                    && password == confirm && !isLoading,
+            enabled = name.isNotBlank() &&
+                email.isNotBlank() &&
+                password.length >= 6 &&
+                password == confirm &&
+                !isLoading,
             colors = ButtonDefaults.buttonColors(containerColor = SentinelLightBlueCard),
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier.fillMaxWidth().height(50.dp)

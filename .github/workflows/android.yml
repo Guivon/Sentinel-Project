@@ -45,7 +45,6 @@ jobs:
 
   ktlint:
     runs-on: ubuntu-latest
-    continue-on-error: true
     defaults:
       run:
         working-directory: App Sentinel
@@ -60,7 +59,6 @@ jobs:
 
   detekt:
     runs-on: ubuntu-latest
-    continue-on-error: true
     defaults:
       run:
         working-directory: App Sentinel

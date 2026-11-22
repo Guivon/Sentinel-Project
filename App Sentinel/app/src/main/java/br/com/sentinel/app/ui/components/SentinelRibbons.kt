@@ -8,18 +8,19 @@ import androidx.compose.ui.graphics.Path
 import br.com.sentinel.app.ui.theme.SentinelLightBlueCard
 
 @Composable
-fun SentinelCornerRibbon(
-    modifier: Modifier = Modifier,
-    color: Color = SentinelLightBlueCard,
-) {
+fun SentinelCornerRibbon(modifier: Modifier = Modifier, color: Color = SentinelLightBlueCard) {
     Canvas(modifier = modifier) {
         val width = size.width
         val height = size.height
 
-        val p1x = width * 0.65f; val p1y = height * 0.02f
-        val p2x = width * 0.65f; val p2y = height * 0.38f
-        val p3x = width * 0.0f;  val p3y = height * 0.90f
-        val p4x = width * 0.0f;  val p4y = height * 0.55f
+        val p1x = width * 0.65f
+        val p1y = height * 0.02f
+        val p2x = width * 0.65f
+        val p2y = height * 0.38f
+        val p3x = width * 0.0f
+        val p3y = height * 0.90f
+        val p4x = width * 0.0f
+        val p4y = height * 0.55f
 
         val topPath = Path().apply {
             moveTo(p1x, p1y)
@@ -41,18 +42,19 @@ fun SentinelCornerRibbon(
 }
 
 @Composable
-fun SentinelCornerRibbonTop(
-    modifier: Modifier = Modifier,
-    color: Color = SentinelLightBlueCard
-) {
+fun SentinelCornerRibbonTop(modifier: Modifier = Modifier, color: Color = SentinelLightBlueCard) {
     Canvas(modifier = modifier) {
         val width = size.width
         val height = size.height
 
-        val p1x = width * 0.80f; val p1y = height * 0.45f
-        val p2x = width * 0.80f; val p2y = height * 0.10f
-        val p3x = width * 0.0f;  val p3y = height * 0.55f
-        val p4x = width * 0.0f;  val p4y = height * 0.95f
+        val p1x = width * 0.80f
+        val p1y = height * 0.45f
+        val p2x = width * 0.80f
+        val p2y = height * 0.10f
+        val p3x = width * 0.0f
+        val p3y = height * 0.55f
+        val p4x = width * 0.0f
+        val p4y = height * 0.95f
 
         val topPath = Path().apply {
             moveTo(p1x, p1y)

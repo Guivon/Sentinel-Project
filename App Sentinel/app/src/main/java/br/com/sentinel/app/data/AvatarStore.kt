@@ -9,9 +9,9 @@ import android.net.Uri
 import android.util.Log
 import io.ktor.client.request.get
 import io.ktor.client.statement.readRawBytes
+import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.io.File
 
 object AvatarStore {
 

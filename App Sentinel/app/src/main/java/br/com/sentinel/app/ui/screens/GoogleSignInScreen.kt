@@ -42,11 +42,7 @@ import br.com.sentinel.app.ui.theme.SentinelTextLight
 import br.com.sentinel.app.ui.theme.SentinelYellow
 
 @Composable
-fun SentinelGoogleSignInScreen(
-    consentAt: String,
-    onBack: () -> Unit,
-    onSuccess: () -> Unit
-) {
+fun SentinelGoogleSignInScreen(consentAt: String, onBack: () -> Unit, onSuccess: () -> Unit) {
     val context = LocalContext.current
     var attempt by remember { mutableIntStateOf(0) }
     var errorText by remember { mutableStateOf<String?>(null) }

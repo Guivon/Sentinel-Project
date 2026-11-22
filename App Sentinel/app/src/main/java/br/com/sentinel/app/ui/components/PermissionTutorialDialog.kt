@@ -168,11 +168,7 @@ enum class PermissionTutorial(
 }
 
 @Composable
-fun PermissionTutorialDialog(
-    tutorial: PermissionTutorial,
-    onDismiss: () -> Unit,
-    onConfirm: () -> Unit
-) {
+fun PermissionTutorialDialog(tutorial: PermissionTutorial, onDismiss: () -> Unit, onConfirm: () -> Unit) {
     val pagerState = rememberPagerState(pageCount = { tutorial.steps.size })
 
     AlertDialog(

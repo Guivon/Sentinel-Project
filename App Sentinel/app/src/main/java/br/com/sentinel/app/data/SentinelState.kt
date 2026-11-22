@@ -4,17 +4,17 @@ import android.content.Context
 import android.util.Log
 import androidx.core.content.edit
 import br.com.sentinel.app.domain.RiskLevel
+import java.security.MessageDigest
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.UUID
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import org.json.JSONArray
 import org.json.JSONObject
-import java.security.MessageDigest
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import java.util.UUID
 
 enum class AlertStatus { CONFIRMED_LOCAL, ANALYZING, CONFIRMED_AI, DISMISSED, OFFICIAL }
 
@@ -123,10 +123,9 @@ object SentinelState {
         return true
     }
 
-    private fun hash(content: String): String =
-        MessageDigest.getInstance("SHA-256")
-            .digest(content.toByteArray(Charsets.UTF_8))
-            .joinToString("") { "%02x".format(it) }
+    private fun hash(content: String): String = MessageDigest.getInstance("SHA-256")
+        .digest(content.toByteArray(Charsets.UTF_8))
+        .joinToString("") { "%02x".format(it) }
 
     private fun save() {
         val prefs = appContext?.getSharedPreferences(PREFS, Context.MODE_PRIVATE) ?: return
@@ -180,17 +179,19 @@ object SentinelState {
     }
 
     private val legacyStatus = mapOf(
-        "CONFIRMADO_LOCAL" to AlertStatus.CONFIRMED_LOCAL, "ANALISANDO" to AlertStatus.ANALYZING,
-        "CONFIRMADO_IA" to AlertStatus.CONFIRMED_AI, "DESCARTADO" to AlertStatus.DISMISSED,
+        "CONFIRMADO_LOCAL" to AlertStatus.CONFIRMED_LOCAL,
+        "ANALISANDO" to AlertStatus.ANALYZING,
+        "CONFIRMADO_IA" to AlertStatus.CONFIRMED_AI,
+        "DESCARTADO" to AlertStatus.DISMISSED,
         "OFICIAL" to AlertStatus.OFFICIAL
     )
     private val legacyLevel = mapOf(
-        "SEGURO" to RiskLevel.SAFE, "DUVIDOSO" to RiskLevel.DOUBTFUL, "SUSPEITO" to RiskLevel.SUSPICIOUS
+        "SEGURO" to RiskLevel.SAFE,
+        "DUVIDOSO" to RiskLevel.DOUBTFUL,
+        "SUSPEITO" to RiskLevel.SUSPICIOUS
     )
 
-    private fun parseStatus(name: String): AlertStatus =
-        legacyStatus[name] ?: AlertStatus.valueOf(name)
+    private fun parseStatus(name: String): AlertStatus = legacyStatus[name] ?: AlertStatus.valueOf(name)
 
-    private fun parseLevel(name: String): RiskLevel =
-        legacyLevel[name] ?: RiskLevel.valueOf(name)
+    private fun parseLevel(name: String): RiskLevel = legacyLevel[name] ?: RiskLevel.valueOf(name)
 }

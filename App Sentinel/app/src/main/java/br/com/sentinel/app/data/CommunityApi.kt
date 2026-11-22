@@ -11,12 +11,12 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.contentType
 import io.ktor.http.withCharset
+import java.time.Duration
+import java.time.OffsetDateTime
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
-import java.time.Duration
-import java.time.OffsetDateTime
 
 object CommunityApi {
 
@@ -62,20 +62,18 @@ object CommunityApi {
         call("POST", "/denuncias", body.toString()) != null
     }
 
-    private suspend fun call(method: String, path: String, body: String?): String? {
-        return try {
-            var result = request(method, path, body, SentinelAuthToken.current())
-            if (result.first == 401) {
-                SentinelAuthToken.refresh()
-                result = request(method, path, body, SentinelAuthToken.current())
-            }
-            if (result.first in 200..299) result.second else null
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: Exception) {
-            Log.e("CommunityApi", "Erro em $path: ${e.message}")
-            null
+    private suspend fun call(method: String, path: String, body: String?): String? = try {
+        var result = request(method, path, body, SentinelAuthToken.current())
+        if (result.first == 401) {
+            SentinelAuthToken.refresh()
+            result = request(method, path, body, SentinelAuthToken.current())
         }
+        if (result.first in 200..299) result.second else null
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: Exception) {
+        Log.e("CommunityApi", "Erro em $path: ${e.message}")
+        null
     }
 
     private suspend fun request(method: String, path: String, body: String?, token: String?): Pair<Int, String> {

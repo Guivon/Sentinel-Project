@@ -139,10 +139,7 @@ fun SentinelConsentScreenPreview() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SentinelConsentScreen(
-    onBack: () -> Unit,
-    onAccept: (acceptedAt: String) -> Unit
-) {
+fun SentinelConsentScreen(onBack: () -> Unit, onAccept: (acceptedAt: String) -> Unit) {
     var agreed by rememberSaveable { mutableStateOf(false) }
     BackHandler { onBack() }
 

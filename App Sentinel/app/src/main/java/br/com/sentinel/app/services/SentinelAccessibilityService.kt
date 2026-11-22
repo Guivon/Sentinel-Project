@@ -59,8 +59,7 @@ class SentinelAccessibilityService : AccessibilityService() {
         super.onDestroy()
     }
 
-    private fun ignore(eventPackage: String) =
-        eventPackage == packageName || eventPackage !in MONITORED_PACKAGES
+    private fun ignore(eventPackage: String) = eventPackage == packageName || eventPackage !in MONITORED_PACKAGES
 
     @Suppress("DEPRECATION")
     private fun analyzeScreen() {
@@ -90,8 +89,11 @@ class SentinelAccessibilityService : AccessibilityService() {
                 .forEach { (block, result) ->
                     if (!SentinelState.canAlert("tela", block)) return@forEach
                     SentinelState.record(
-                        "Tela • $name", block, result.reasons,
-                        AlertStatus.CONFIRMED_LOCAL, result.level
+                        "Tela • $name",
+                        block,
+                        result.reasons,
+                        AlertStatus.CONFIRMED_LOCAL,
+                        result.level
                     )
                     NotificationHelper.sendNotification(this, "$name (tela)", result.reasons, block)
                 }

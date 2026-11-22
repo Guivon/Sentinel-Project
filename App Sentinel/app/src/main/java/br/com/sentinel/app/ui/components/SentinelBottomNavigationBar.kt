@@ -31,10 +31,7 @@ fun SentinelBottomNavigationBarPreview() {
 }
 
 @Composable
-fun SentinelBottomNavigationBar(
-    currentScreen: SentinelScreen,
-    onNavigate: (SentinelScreen) -> Unit
-) {
+fun SentinelBottomNavigationBar(currentScreen: SentinelScreen, onNavigate: (SentinelScreen) -> Unit) {
     val itemColors = NavigationBarItemDefaults.colors(
         selectedIconColor = SentinelBlueBg,
         selectedTextColor = SentinelBlueBg,

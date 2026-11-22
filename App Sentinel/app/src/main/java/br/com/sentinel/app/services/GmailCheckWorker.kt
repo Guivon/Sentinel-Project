@@ -12,10 +12,7 @@ import br.com.sentinel.app.domain.AutoAnalysis
 import br.com.sentinel.app.domain.OfficialContacts
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 
-class GmailCheckWorker(
-    context: Context,
-    params: WorkerParameters
-) : CoroutineWorker(context, params) {
+class GmailCheckWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
         val accountEmail = GmailHelper.connectedEmail(applicationContext) ?: return Result.success()

@@ -52,11 +52,7 @@ private const val RESEND_COOLDOWN_SECONDS = 60
 private const val SECOND_MS = 1000L
 
 @Composable
-fun SentinelVerifyEmailScreen(
-    email: String,
-    onBack: () -> Unit,
-    onVerified: () -> Unit
-) {
+fun SentinelVerifyEmailScreen(email: String, onBack: () -> Unit, onVerified: () -> Unit) {
     var code by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
     var errorText by remember { mutableStateOf<String?>(null) }
@@ -179,12 +175,7 @@ private fun VerifyConfirmButton(enabled: Boolean, loading: Boolean, onClick: () 
 }
 
 @Composable
-private fun VerifyResendButton(
-    cooldown: Int,
-    enabled: Boolean,
-    modifier: Modifier,
-    onClick: () -> Unit
-) {
+private fun VerifyResendButton(cooldown: Int, enabled: Boolean, modifier: Modifier, onClick: () -> Unit) {
     TextButton(onClick = onClick, enabled = enabled, modifier = modifier) {
         Text(
             if (cooldown > 0) {

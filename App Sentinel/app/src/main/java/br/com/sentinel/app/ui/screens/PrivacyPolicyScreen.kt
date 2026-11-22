@@ -35,9 +35,7 @@ import br.com.sentinel.app.ui.theme.SentinelDarkBlueButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SentinelPrivacyPolicyScreen(
-    onBack: () -> Unit
-) {
+fun SentinelPrivacyPolicyScreen(onBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(

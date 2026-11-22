@@ -39,12 +39,23 @@ fun SentinelAppPreview() {
 }
 
 enum class SentinelScreen {
-    SPLASH, ONBOARDING_PERMISSIONS, WELCOME, HOME, ANALYSIS_RESULT, PROFILE, HISTORY, LEARN, SECURITY, PRIVACY_POLICY,
+    SPLASH,
+    ONBOARDING_PERMISSIONS,
+    WELCOME,
+    HOME,
+    ANALYSIS_RESULT,
+    PROFILE,
+    HISTORY,
+    LEARN,
+    SECURITY,
+    PRIVACY_POLICY,
     SECURITY_TIPS
 }
 
 private val ROOT_SCREENS = setOf(
-    SentinelScreen.WELCOME, SentinelScreen.ONBOARDING_PERMISSIONS, SentinelScreen.HOME
+    SentinelScreen.WELCOME,
+    SentinelScreen.ONBOARDING_PERMISSIONS,
+    SentinelScreen.HOME
 )
 
 private fun NavController.go(target: SentinelScreen) {

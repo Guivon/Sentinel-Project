@@ -51,11 +51,7 @@ import br.com.sentinel.app.ui.theme.SentinelRiskPink
 import br.com.sentinel.app.ui.theme.SentinelRiskRed
 import br.com.sentinel.app.ui.theme.SentinelYellow
 
-private class SecurityTip(
-    val icon: ImageVector,
-    @StringRes val title: Int,
-    @StringRes val body: Int
-)
+private class SecurityTip(val icon: ImageVector, @StringRes val title: Int, @StringRes val body: Int)
 
 private val securityTips = listOf(
     SecurityTip(Icons.Default.Schedule, R.string.tip_urgency_title, R.string.tip_urgency_body),

@@ -15,6 +15,4 @@ suspend fun markOnboardingCompleted(context: Context) {
     context.dataStore.edit { it[ONBOARDING_DONE] = true }
 }
 
-suspend fun isOnboardingCompleted(context: Context): Boolean {
-    return context.dataStore.data.first()[ONBOARDING_DONE] ?: false
-}
+suspend fun isOnboardingCompleted(context: Context): Boolean = context.dataStore.data.first()[ONBOARDING_DONE] ?: false

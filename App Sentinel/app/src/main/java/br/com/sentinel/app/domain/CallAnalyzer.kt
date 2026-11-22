@@ -48,26 +48,7 @@ object CallAnalyzer {
         val known = if (hidden) false else isInContacts(context, number.orEmpty())
         if (known == true) return
 
-        val signs = mutableListOf<Pair<String, Int>>()
-        if (hidden) signs += context.getString(R.string.call_sign_hidden) to WEIGHT_HIDDEN
-        if (verificationFailed) {
-            val text = if (institution != null) {
-                context.getString(R.string.call_sign_claims_official, institution)
-            } else {
-                context.getString(R.string.call_sign_spoofed)
-            }
-            signs += text to WEIGHT_SPOOFED
-        }
-        if (!hidden && institution == null) {
-            val digits = number.orEmpty().trim()
-            if (digits.startsWith("+") && !digits.startsWith(BRAZIL_PREFIX)) {
-                signs += context.getString(R.string.call_sign_international) to WEIGHT_INTERNATIONAL
-            }
-            if (digits.filter { it.isDigit() }.startsWith(TELEMARKETING_PREFIX)) {
-                signs += context.getString(R.string.call_sign_telemarketing) to WEIGHT_TELEMARKETING
-            }
-            if (known == false) signs += context.getString(R.string.call_sign_unknown) to WEIGHT_UNKNOWN
-        }
+        val signs = collectSigns(context, number, institution, known, verificationFailed)
 
         SentinelState.recordAnalysis()
         val score = signs.sumOf { it.second }.coerceAtMost(100)
@@ -103,6 +84,37 @@ object CallAnalyzer {
         val reasons = signs.map { it.first }
         SentinelState.record(source, snippet, reasons, AlertStatus.CONFIRMED_LOCAL, level)
         NotificationHelper.sendNotification(context, source, reasons, snippet)
+    }
+
+    private fun collectSigns(
+        context: Context,
+        number: String?,
+        institution: String?,
+        known: Boolean?,
+        verificationFailed: Boolean
+    ): List<Pair<String, Int>> {
+        val signs = mutableListOf<Pair<String, Int>>()
+        val hidden = number.isNullOrBlank()
+        if (hidden) signs += context.getString(R.string.call_sign_hidden) to WEIGHT_HIDDEN
+        if (verificationFailed) {
+            val text = if (institution != null) {
+                context.getString(R.string.call_sign_claims_official, institution)
+            } else {
+                context.getString(R.string.call_sign_spoofed)
+            }
+            signs += text to WEIGHT_SPOOFED
+        }
+        if (!hidden && institution == null) {
+            val digits = number.orEmpty().trim()
+            if (digits.startsWith("+") && !digits.startsWith(BRAZIL_PREFIX)) {
+                signs += context.getString(R.string.call_sign_international) to WEIGHT_INTERNATIONAL
+            }
+            if (digits.filter { it.isDigit() }.startsWith(TELEMARKETING_PREFIX)) {
+                signs += context.getString(R.string.call_sign_telemarketing) to WEIGHT_TELEMARKETING
+            }
+            if (known == false) signs += context.getString(R.string.call_sign_unknown) to WEIGHT_UNKNOWN
+        }
+        return signs
     }
 
     private fun isInContacts(context: Context, number: String): Boolean? {

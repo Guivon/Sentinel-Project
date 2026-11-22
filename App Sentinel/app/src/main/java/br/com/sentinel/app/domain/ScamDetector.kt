@@ -6,12 +6,7 @@ enum class RiskLevel { SAFE, DOUBTFUL, SUSPICIOUS }
 
 object ScamDetector {
 
-    private class Category(
-        val name: String,
-        words: List<String>,
-        val weightValue: Int,
-        val strong: Boolean = false
-    ) {
+    private class Category(val name: String, words: List<String>, val weightValue: Int, val strong: Boolean = false) {
         private val patterns = words.map { word ->
             val escaped = Regex.escape(word)
             Regex(if (word.length <= 3) "\\b$escaped\\b" else "\\b$escaped")

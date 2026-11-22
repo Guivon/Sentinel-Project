@@ -29,7 +29,8 @@ object AutoAnalysis {
         if (local.level == RiskLevel.SAFE) {
             if (officialInstitution != null) {
                 SentinelState.record(
-                    source, historyContent,
+                    source,
+                    historyContent,
                     listOf("Diz ser de $officialInstitution (identidade não verificada)"),
                     AlertStatus.OFFICIAL
                 )

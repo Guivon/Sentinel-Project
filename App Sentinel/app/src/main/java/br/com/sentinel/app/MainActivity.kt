@@ -25,7 +25,6 @@ class MainActivity : ComponentActivity() {
                 ) { }
 
                 LaunchedEffect(Unit) {
-
                     val missing = buildList {
                         if (Build.VERSION.SDK_INT >= 33) add(Manifest.permission.POST_NOTIFICATIONS)
                     }.filter {

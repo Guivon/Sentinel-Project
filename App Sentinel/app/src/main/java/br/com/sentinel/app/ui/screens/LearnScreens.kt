@@ -75,94 +75,90 @@ internal fun learnTopics(): List<LearnTopic> = listOf(
 )
 
 @Composable
-private fun fakeBillTopic(): LearnTopic =
-    LearnTopic(
-        title = stringResource(R.string.golpe_do_falso_boleto),
-        description = stringResource(R.string.como_conferir_os_dados_do_beneficiario),
-        icon = Icons.Outlined.Cancel,
-        iconTint = Color.White,
-        iconBackground = SentinelRiskRed,
-        howItWorks = stringResource(R.string.o_golpista_envia_um_boleto_falso_muita),
-        warningSigns = listOf(
-            stringResource(R.string.boleto_chegou_por_e_mail_ou_whatsapp_s),
-            stringResource(R.string.valor_ou_vencimento_diferentes_do_que),
-            stringResource(R.string.nome_do_beneficiario_nao_bate_com_a_em),
-            stringResource(R.string.pressao_para_pagar_rapidamente_com_ame)
-        ),
-        howToProtect = listOf(
-            stringResource(R.string.confira_o_nome_do_beneficiario_antes_d),
-            stringResource(R.string.compare_o_codigo_de_barras_com_o_do_ap),
-            stringResource(R.string.em_caso_de_duvida_ligue_para_a_empresa),
-            stringResource(R.string.evite_pagar_boletos_recebidos_fora_dos)
-        )
+private fun fakeBillTopic(): LearnTopic = LearnTopic(
+    title = stringResource(R.string.golpe_do_falso_boleto),
+    description = stringResource(R.string.como_conferir_os_dados_do_beneficiario),
+    icon = Icons.Outlined.Cancel,
+    iconTint = Color.White,
+    iconBackground = SentinelRiskRed,
+    howItWorks = stringResource(R.string.o_golpista_envia_um_boleto_falso_muita),
+    warningSigns = listOf(
+        stringResource(R.string.boleto_chegou_por_e_mail_ou_whatsapp_s),
+        stringResource(R.string.valor_ou_vencimento_diferentes_do_que),
+        stringResource(R.string.nome_do_beneficiario_nao_bate_com_a_em),
+        stringResource(R.string.pressao_para_pagar_rapidamente_com_ame)
+    ),
+    howToProtect = listOf(
+        stringResource(R.string.confira_o_nome_do_beneficiario_antes_d),
+        stringResource(R.string.compare_o_codigo_de_barras_com_o_do_ap),
+        stringResource(R.string.em_caso_de_duvida_ligue_para_a_empresa),
+        stringResource(R.string.evite_pagar_boletos_recebidos_fora_dos)
     )
+)
 
 @Composable
-private fun whatsAppCloningTopic(): LearnTopic =
-    LearnTopic(
-        title = stringResource(R.string.clonagem_de_whatsapp),
-        description = stringResource(R.string.ative_a_confirmacao_em_duas_etapas_e_n),
-        icon = Icons.Default.Fingerprint,
-        iconTint = SentinelTealDarker,
-        iconBackground = SentinelTeal,
-        howItWorks = stringResource(R.string.o_golpista_descobre_seu_numero_e_tenta),
-        warningSigns = listOf(
-            stringResource(R.string.voce_recebe_um_sms_com_codigo_de_verif),
-            stringResource(R.string.alguem_pede_esse_codigo_por_telefone_o),
-            stringResource(R.string.seu_whatsapp_desconecta_sozinho_sem_mo)
-        ),
-        howToProtect = listOf(
-            stringResource(R.string.nunca_compartilhe_o_codigo_de_verifica),
-            stringResource(R.string.ative_a_confirmacao_em_duas_etapas_em),
-            stringResource(R.string.se_seu_whatsapp_for_clonado_avise_seus)
-        )
+private fun whatsAppCloningTopic(): LearnTopic = LearnTopic(
+    title = stringResource(R.string.clonagem_de_whatsapp),
+    description = stringResource(R.string.ative_a_confirmacao_em_duas_etapas_e_n),
+    icon = Icons.Default.Fingerprint,
+    iconTint = SentinelTealDarker,
+    iconBackground = SentinelTeal,
+    howItWorks = stringResource(R.string.o_golpista_descobre_seu_numero_e_tenta),
+    warningSigns = listOf(
+        stringResource(R.string.voce_recebe_um_sms_com_codigo_de_verif),
+        stringResource(R.string.alguem_pede_esse_codigo_por_telefone_o),
+        stringResource(R.string.seu_whatsapp_desconecta_sozinho_sem_mo)
+    ),
+    howToProtect = listOf(
+        stringResource(R.string.nunca_compartilhe_o_codigo_de_verifica),
+        stringResource(R.string.ative_a_confirmacao_em_duas_etapas_em),
+        stringResource(R.string.se_seu_whatsapp_for_clonado_avise_seus)
     )
+)
 
 @Composable
-private fun emailPhishingTopic(): LearnTopic =
-    LearnTopic(
-        title = stringResource(R.string.phishing_por_e_mail),
-        description = stringResource(R.string.aprenda_a_identificar_remetentes_falso),
-        icon = Icons.Outlined.Cancel,
-        iconTint = SentinelLightBlueCard,
-        iconBackground = SentinelPaleBlueAlt,
-        howItWorks = stringResource(R.string.voce_recebe_um_e_mail_parecido_com_o_d),
-        warningSigns = listOf(
-            stringResource(R.string.e_mail_do_remetente_tem_dominio_estran),
-            stringResource(R.string.erros_de_portugues_ou_formatacao_estra),
-            stringResource(R.string.pede_para_clicar_em_link_e_inserir_sen),
-            stringResource(R.string.cria_urgencia_sua_conta_sera_bloqueada)
-        ),
-        howToProtect = listOf(
-            stringResource(R.string.nunca_clique_em_links_de_e_mail_para_a),
-            stringResource(R.string.confira_o_dominio_completo_do_remetent),
-            stringResource(R.string.bancos_nunca_pedem_senha_completa_por),
-            stringResource(R.string.em_caso_de_duvida_entre_em_contato_pel)
-        )
+private fun emailPhishingTopic(): LearnTopic = LearnTopic(
+    title = stringResource(R.string.phishing_por_e_mail),
+    description = stringResource(R.string.aprenda_a_identificar_remetentes_falso),
+    icon = Icons.Outlined.Cancel,
+    iconTint = SentinelLightBlueCard,
+    iconBackground = SentinelPaleBlueAlt,
+    howItWorks = stringResource(R.string.voce_recebe_um_e_mail_parecido_com_o_d),
+    warningSigns = listOf(
+        stringResource(R.string.e_mail_do_remetente_tem_dominio_estran),
+        stringResource(R.string.erros_de_portugues_ou_formatacao_estra),
+        stringResource(R.string.pede_para_clicar_em_link_e_inserir_sen),
+        stringResource(R.string.cria_urgencia_sua_conta_sera_bloqueada)
+    ),
+    howToProtect = listOf(
+        stringResource(R.string.nunca_clique_em_links_de_e_mail_para_a),
+        stringResource(R.string.confira_o_dominio_completo_do_remetent),
+        stringResource(R.string.bancos_nunca_pedem_senha_completa_por),
+        stringResource(R.string.em_caso_de_duvida_entre_em_contato_pel)
     )
+)
 
 @Composable
-private fun fakeJobTopic(): LearnTopic =
-    LearnTopic(
-        title = stringResource(R.string.falso_emprego_tarefas),
-        description = stringResource(R.string.cuidado_com_promessas_de_dinheiro_faci),
-        icon = Icons.Outlined.Warning,
-        iconTint = SentinelWarningDarkest,
-        iconBackground = SentinelWarningYellow,
-        howItWorks = stringResource(R.string.voce_recebe_uma_oferta_de_emprego_faci),
-        warningSigns = listOf(
-            stringResource(R.string.promessa_de_ganho_alto_por_tarefa_simp),
-            stringResource(R.string.pedem_deposito_ou_pagamento_antecipado),
-            stringResource(R.string.contato_comecou_por_mensagem_nao_solic),
-            stringResource(R.string.pressao_para_recrutar_mais_pessoas_par)
-        ),
-        howToProtect = listOf(
-            stringResource(R.string.desconfie_de_qualquer_emprego_que_peca),
-            stringResource(R.string.empresas_serias_nao_cobram_para_voce_t),
-            stringResource(R.string.pesquise_o_nome_da_empresa_antes_de_ac),
-            stringResource(R.string.nunca_deposite_dinheiro_para_desbloque)
-        )
+private fun fakeJobTopic(): LearnTopic = LearnTopic(
+    title = stringResource(R.string.falso_emprego_tarefas),
+    description = stringResource(R.string.cuidado_com_promessas_de_dinheiro_faci),
+    icon = Icons.Outlined.Warning,
+    iconTint = SentinelWarningDarkest,
+    iconBackground = SentinelWarningYellow,
+    howItWorks = stringResource(R.string.voce_recebe_uma_oferta_de_emprego_faci),
+    warningSigns = listOf(
+        stringResource(R.string.promessa_de_ganho_alto_por_tarefa_simp),
+        stringResource(R.string.pedem_deposito_ou_pagamento_antecipado),
+        stringResource(R.string.contato_comecou_por_mensagem_nao_solic),
+        stringResource(R.string.pressao_para_recrutar_mais_pessoas_par)
+    ),
+    howToProtect = listOf(
+        stringResource(R.string.desconfie_de_qualquer_emprego_que_peca),
+        stringResource(R.string.empresas_serias_nao_cobram_para_voce_t),
+        stringResource(R.string.pesquise_o_nome_da_empresa_antes_de_ac),
+        stringResource(R.string.nunca_deposite_dinheiro_para_desbloque)
     )
+)
 
 @Composable
 fun SentinelLearnScreen(onBack: () -> Unit) {

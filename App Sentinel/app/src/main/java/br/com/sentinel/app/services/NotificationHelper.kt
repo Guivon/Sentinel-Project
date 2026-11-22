@@ -81,9 +81,9 @@ object NotificationHelper {
         }
     }
 
-    private fun hasPermission(context: Context): Boolean {
-        return ContextCompat.checkSelfPermission(
-            context, android.Manifest.permission.POST_NOTIFICATIONS
-        ) == PackageManager.PERMISSION_GRANTED || Build.VERSION.SDK_INT < 33
-    }
+    private fun hasPermission(context: Context): Boolean = ContextCompat.checkSelfPermission(
+        context,
+        android.Manifest.permission.POST_NOTIFICATIONS
+    ) == PackageManager.PERMISSION_GRANTED ||
+        Build.VERSION.SDK_INT < 33
 }

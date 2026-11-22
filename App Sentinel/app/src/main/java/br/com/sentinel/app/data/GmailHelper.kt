@@ -10,9 +10,9 @@ import com.google.api.services.gmail.Gmail
 import com.google.api.services.gmail.GmailScopes
 import com.google.api.services.gmail.model.Message
 import com.google.api.services.gmail.model.MessagePart
+import java.util.Base64
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.util.Base64
 
 object GmailHelper {
 
@@ -25,25 +25,23 @@ object GmailHelper {
         }
     }
 
-    fun connectedEmail(context: Context): String? {
-        return context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString(KEY_EMAIL, null)
-    }
+    fun connectedEmail(context: Context): String? =
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString(KEY_EMAIL, null)
 
     fun createCredential(context: Context, email: String): GoogleAccountCredential {
         val credential = GoogleAccountCredential.usingOAuth2(
-            context, listOf(GmailScopes.GMAIL_READONLY)
+            context,
+            listOf(GmailScopes.GMAIL_READONLY)
         )
         credential.selectedAccount = Account(email, "com.google")
         return credential
     }
 
-    fun createService(credential: GoogleAccountCredential): Gmail {
-        return Gmail.Builder(
-            GoogleNetHttpTransport.newTrustedTransport(),
-            GsonFactory.getDefaultInstance(),
-            credential
-        ).setApplicationName("Sentinel").build()
-    }
+    fun createService(credential: GoogleAccountCredential): Gmail = Gmail.Builder(
+        GoogleNetHttpTransport.newTrustedTransport(),
+        GsonFactory.getDefaultInstance(),
+        credential
+    ).setApplicationName("Sentinel").build()
 
     suspend fun fetchLatestEmails(gmail: Gmail, limit: Long = 10): List<EmailSummary> = withContext(Dispatchers.IO) {
         val listResponse = gmail.users().messages().list("me").setMaxResults(limit).execute()

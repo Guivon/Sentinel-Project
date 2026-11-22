@@ -16,23 +16,19 @@ import kotlinx.serialization.json.put
 object AuthRepository {
     private val auth get() = SupabaseProvider.client.auth
 
-    suspend fun signUp(
-        name: String,
-        email: String,
-        password: String,
-        consentAt: String
-    ): Result<Boolean> = runCatching {
-        auth.signUpWith(Email) {
-            this.email = email
-            this.password = password
-            data = buildJsonObject {
-                put("name", name)
-                put("consent_version", CONSENT_VERSION)
-                put("consent_at", consentAt)
+    suspend fun signUp(name: String, email: String, password: String, consentAt: String): Result<Boolean> =
+        runCatching {
+            auth.signUpWith(Email) {
+                this.email = email
+                this.password = password
+                data = buildJsonObject {
+                    put("name", name)
+                    put("consent_version", CONSENT_VERSION)
+                    put("consent_at", consentAt)
+                }
             }
+            auth.currentSessionOrNull() != null
         }
-        auth.currentSessionOrNull() != null
-    }
 
     suspend fun verifySignupCode(email: String, code: String): Result<Unit> = runCatching {
         auth.verifyEmailOtp(type = OtpType.Email.SIGNUP, email = email, token = code)
@@ -80,8 +76,7 @@ object AuthRepository {
         return status is SessionStatus.Authenticated
     }
 
-    fun currentName(): String? =
-        auth.currentUserOrNull()?.userMetadata?.get("name")?.jsonPrimitive?.contentOrNull
+    fun currentName(): String? = auth.currentUserOrNull()?.userMetadata?.get("name")?.jsonPrimitive?.contentOrNull
 
     fun currentEmail(): String? = auth.currentUserOrNull()?.email
 
@@ -94,24 +89,25 @@ object AuthRepository {
         }
     }
 
+    private val errorRules: List<Pair<(String) -> Boolean, String>> = listOf(
+        { m: String -> "invalid login credentials" in m } to "E-mail ou senha incorretos.",
+        { m: String -> "already registered" in m || "already exists" in m } to "Este e-mail já está cadastrado.",
+        { m: String -> "at least" in m && "password" in m } to "A senha precisa ter pelo menos 6 caracteres.",
+        { m: String -> "email not confirmed" in m } to
+            "Confirme seu e-mail para entrar. Crie a conta de novo para receber outro código.",
+        { m: String -> "provider_disabled" in m || "is not enabled" in m } to
+            "O login com Google ainda não está ativado no servidor.",
+        { m: String -> "otp_expired" in m || "has expired or is invalid" in m } to
+            "Código inválido ou vencido. Peça um novo código.",
+        { m: String -> "rate limit" in m || "too many" in m || "seconds" in m } to
+            "Muitas tentativas. Aguarde um minuto e tente de novo.",
+        { m: String -> "invalid" in m && "email" in m } to "E-mail inválido.",
+        { m: String -> "unable to resolve" in m || "timeout" in m || "connect" in m } to
+            "Não foi possível conectar ao servidor."
+    )
+
     fun errorMessage(e: Throwable): String {
         val msg = e.message?.lowercase() ?: ""
-        return when {
-            "invalid login credentials" in msg -> "E-mail ou senha incorretos."
-            "already registered" in msg || "already exists" in msg -> "Este e-mail já está cadastrado."
-            "at least" in msg && "password" in msg -> "A senha precisa ter pelo menos 6 caracteres."
-            "email not confirmed" in msg ->
-                "Confirme seu e-mail para entrar. Crie a conta de novo para receber outro código."
-            "provider_disabled" in msg || "is not enabled" in msg ->
-                "O login com Google ainda não está ativado no servidor."
-            "otp_expired" in msg || "has expired or is invalid" in msg ->
-                "Código inválido ou vencido. Peça um novo código."
-            "rate limit" in msg || "too many" in msg || "seconds" in msg ->
-                "Muitas tentativas. Aguarde um minuto e tente de novo."
-            "invalid" in msg && "email" in msg -> "E-mail inválido."
-            "unable to resolve" in msg || "timeout" in msg || "connect" in msg ->
-                "Não foi possível conectar ao servidor."
-            else -> "Erro ao autenticar. Tente novamente."
-        }
+        return errorRules.firstOrNull { it.first(msg) }?.second ?: "Erro ao autenticar. Tente novamente."
     }
 }
