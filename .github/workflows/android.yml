@@ -2,16 +2,16 @@ name: android
 
 on:
   push:
-    paths: ['sentinel-android/**', '.github/workflows/android.yml']
+    paths: ['App Sentinel/**', '.github/workflows/android.yml']
   pull_request:
-    paths: ['sentinel-android/**', '.github/workflows/android.yml']
+    paths: ['App Sentinel/**', '.github/workflows/android.yml']
 
 jobs:
   build:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: sentinel-android
+        working-directory: App Sentinel
     steps:
       - uses: actions/checkout@v4
 
@@ -22,7 +22,7 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
         with:
-          build-root-directory: sentinel-android
+          build-root-directory: App Sentinel
 
       - name: Write local.properties
         run: |
@@ -42,7 +42,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: lint-report
-          path: sentinel-android/app/build/reports/lint-results-debug.html
+          path: App Sentinel/app/build/reports/lint-results-debug.html
           if-no-files-found: ignore
 
   ktlint:
@@ -50,7 +50,7 @@ jobs:
     continue-on-error: true
     defaults:
       run:
-        working-directory: sentinel-android
+        working-directory: App Sentinel
     steps:
       - uses: actions/checkout@v4
       - name: Install ktlint
@@ -65,7 +65,7 @@ jobs:
     continue-on-error: true
     defaults:
       run:
-        working-directory: sentinel-android
+        working-directory: App Sentinel
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
