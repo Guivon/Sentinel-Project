@@ -6,6 +6,7 @@ import br.com.sentinel.app.R
 import br.com.sentinel.app.data.AlertStatus
 import br.com.sentinel.app.data.SentinelApi
 import br.com.sentinel.app.data.SentinelState
+import br.com.sentinel.app.domain.QrScanner
 import br.com.sentinel.app.domain.RiskLevel
 import br.com.sentinel.app.domain.ScamDetector
 import kotlinx.coroutines.CoroutineScope
@@ -60,7 +61,14 @@ class AnalysisViewModel : ViewModel() {
                 return@launch
             }
             val source = appContext.getString(R.string.manual_analysis)
-            val response = SentinelApi.analyze(source, text, appScore = localResult.score, file = upload)
+            val pix = upload?.let { QrScanner.findPix(appContext, it.bytes) }
+            val response = SentinelApi.analyze(
+                source,
+                text,
+                appScore = localResult.score,
+                file = upload,
+                pix = pix
+            )
             if (response == null && file != null && text.isBlank()) {
                 abort(R.string.attachment_analysis_failed)
                 return@launch

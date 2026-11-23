@@ -95,6 +95,7 @@ dependencies {
     implementation("io.github.jan-tennert.supabase:auth-kt")
     implementation("io.github.jan-tennert.supabase:postgrest-kt")
     implementation("androidx.navigation:navigation-compose:2.8.9")
+    implementation("com.google.mlkit:barcode-scanning:17.3.0")
     implementation("io.ktor:ktor-client-core:3.2.3")
     implementation("io.ktor:ktor-client-android:3.2.3")
     implementation("androidx.credentials:credentials:1.3.0")

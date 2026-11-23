@@ -88,7 +88,13 @@ def _months_since(opening: str | None) -> int | None:
 
 
 def verify(cnpj: str) -> dict[str, Any]:
-    result: dict[str, Any] = {"cnpj": mask(cnpj), "situacao": "desconhecida", "alertas": []}
+    result: dict[str, Any] = {
+        "cnpj": mask(cnpj),
+        "cnpj_id": cnpj,
+        "situacao": "desconhecida",
+        "alertas": [],
+        "nomes": [],
+    }
     if not is_valid(cnpj):
         result["situacao"] = "invalido"
         result["alertas"].append("CNPJ inválido: os dígitos verificadores não conferem")
@@ -101,6 +107,9 @@ def verify(cnpj: str) -> dict[str, Any]:
     if status != "ok" or data is None:
         result["alertas"].append("Não foi possível consultar o CNPJ agora")
         return result
+    result["nomes"] = [
+        str(data[field]) for field in ("razao_social", "nome_fantasia") if data.get(field)
+    ]
     registration = str(data.get("descricao_situacao_cadastral") or "").upper()
     result["situacao"] = registration.lower() or "ativa"
     if registration in BAD_STATUS:

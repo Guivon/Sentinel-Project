@@ -54,7 +54,8 @@ object SentinelApi {
         appScore: Int? = null,
         timeoutMs: Int = 60_000,
         file: UploadFile? = null,
-        sender: SenderContext? = null
+        sender: SenderContext? = null,
+        pix: String? = null
     ): BackendResponse? = withContext(Dispatchers.IO) {
         try {
             val auth = SupabaseProvider.client.auth
@@ -66,13 +67,14 @@ object SentinelApi {
                 appScore,
                 timeoutMs,
                 file,
-                sender
+                sender,
+                pix
             )
 
             if (httpResult.statusCode == 401 && token == null) {
                 runCatching { auth.refreshCurrentSession() }
                 httpResult =
-                    callBackend(app, content, auth.currentAccessTokenOrNull(), appScore, timeoutMs, file, sender)
+                    callBackend(app, content, auth.currentAccessTokenOrNull(), appScore, timeoutMs, file, sender, pix)
             }
 
             if (httpResult.statusCode == 200) {
@@ -127,7 +129,8 @@ object SentinelApi {
         appScore: Int?,
         timeoutMs: Int,
         file: UploadFile?,
-        sender: SenderContext?
+        sender: SenderContext?,
+        pix: String?
     ): HttpResult {
         val response = HttpClientProvider.client.post(analysisUrl) {
             if (!token.isNullOrBlank()) bearerAuth(token)
@@ -143,6 +146,7 @@ object SentinelApi {
                     put("app", app)
                     put("texto", content)
                     if (score != null) put("pontuacao_app", score)
+                    if (!pix.isNullOrBlank()) put("codigo_pix", pix)
                     if (sender != null) {
                         put("remetente", sender.id)
                         sender.inContacts?.let { put("em_contatos", it) }
@@ -158,6 +162,7 @@ object SentinelApi {
                             append("app", app)
                             append("texto", content)
                             if (score != null) append("pontuacao_app", score.toString())
+                            if (!pix.isNullOrBlank()) append("codigo_pix", pix)
                             if (sender != null) {
                                 append("remetente", sender.id)
                                 sender.inContacts?.let { append("em_contatos", it.toString()) }

@@ -9,6 +9,7 @@ from botocore.exceptions import BotoCoreError, ClientError
 from flask import Blueprint, Response, g, jsonify, request
 
 import cnpj as cnpj_check
+import pix as pix_check
 from auth import require_token
 from config import supabase_url
 from limits import WindowLimiter
@@ -27,9 +28,11 @@ AWS_REGION = os.environ.get("AWS_REGION", "us-east-2")
 BEDROCK_MODEL_ID = os.environ.get("BEDROCK_MODEL_ID", "us.amazon.nova-pro-v1:0")
 FILE_LIMIT = int(os.environ.get("LIMITE_ARQUIVO_BYTES", "4000000"))
 
+PIX_RISK_SCORE = 85
 CNPJ_RISK_SCORE = 75
 CNPJ_WARNING_BONUS = 15
 TEXT_LIMIT = 4000
+PIX_LIMIT = 1000
 APP_LIMIT = 60
 
 
@@ -392,6 +395,23 @@ def _apply_cnpj(normalized: dict[str, Any], checks: list[dict[str, Any]]) -> Non
             normalized["suspeito"] = True
 
 
+def _apply_pix(normalized: dict[str, Any], evaluation: dict[str, Any]) -> None:
+
+    alerts = evaluation["alertas"]
+    if not alerts:
+        return
+    normalized["motivos"] = (alerts + normalized["motivos"])[:4]
+    normalized["suspeito"] = True
+    if evaluation["risco"]:
+        normalized["pontuacao"] = max(normalized["pontuacao"], PIX_RISK_SCORE)
+        normalized["nivel"] = "alto"
+        normalized["confianca"] = max(normalized["confianca"], 0.85)
+    else:
+        normalized["pontuacao"] = min(100, normalized["pontuacao"] + CNPJ_WARNING_BONUS)
+        if normalized["nivel"] == "baixo":
+            normalized["nivel"] = "medio"
+
+
 def _supabase_headers() -> dict[str, str]:
 
     request_headers = {
@@ -480,6 +500,14 @@ def analyze() -> tuple[Response, int]:
         return _error("Não foi possível analisar agora. Tente novamente.", 503)
 
     normalized = _normalize(result, app_score)
-    _apply_cnpj(normalized, cnpj_check.verify_all(text, result.get("cnpjs")))
+    pix_payload = _as_text(fields.get("codigo_pix"), PIX_LIMIT) or pix_check.find_in_text(text)
+    pix_info = pix_check.parse(pix_payload) if pix_payload else None
+    doc_cnpjs = cnpj_check.extract(text, result.get("cnpjs"))
+    key_id = pix_check.key_cnpj(pix_info)
+    to_check = [*doc_cnpjs, key_id] if key_id and key_id not in doc_cnpjs else doc_cnpjs
+    checks = [cnpj_check.verify(item) for item in to_check]
+    _apply_cnpj(normalized, checks)
+    if pix_payload:
+        _apply_pix(normalized, pix_check.evaluate(pix_info, doc_cnpjs, checks))
     _save(g.user_id, app_origin, normalized)
     return jsonify(normalized), 200
