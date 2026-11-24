@@ -93,7 +93,7 @@ fun SentinelHomeScreen(
                     .verticalScroll(rememberScrollState())
                     .padding(16.dp)
             ) {
-                HomeTopBar()
+                HomeTopBar(onNotificationsClick = { onNavigate(SentinelScreen.NOTIFICATIONS) })
                 Spacer(modifier = Modifier.height(24.dp))
                 HomeGreeting(userName)
                 Spacer(modifier = Modifier.height(24.dp))

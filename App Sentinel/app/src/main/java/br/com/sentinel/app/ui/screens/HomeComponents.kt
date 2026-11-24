@@ -101,7 +101,7 @@ internal fun BoxScope.HomeBackgroundShapes() {
 }
 
 @Composable
-internal fun HomeTopBar() {
+internal fun HomeTopBar(onNotificationsClick: () -> Unit = {}) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -117,7 +117,9 @@ internal fun HomeTopBar() {
             imageVector = Icons.Outlined.Notifications,
             contentDescription = stringResource(R.string.notificacoes),
             tint = SentinelYellow,
-            modifier = Modifier.size(32.dp)
+            modifier = Modifier
+                .size(32.dp)
+                .clickable(onClick = onNotificationsClick)
         )
     }
 }

@@ -172,7 +172,8 @@ private fun SentinelAppContent() {
                     screen = screen,
                     analysis = analysis,
                     session = session,
-                    onNavigate = { navController.go(it) }
+                    onNavigate = { navController.go(it) },
+                    onPop = { navController.popBackStack() }
                 )
             }
         }
@@ -189,7 +190,8 @@ private fun SentinelScreenContent(
     screen: SentinelScreen,
     analysis: AnalysisViewModel,
     session: SessionViewModel,
-    onNavigate: (SentinelScreen) -> Unit
+    onNavigate: (SentinelScreen) -> Unit,
+    onPop: () -> Unit
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -244,7 +246,7 @@ private fun SentinelScreenContent(
             onBack = { onNavigate(SentinelScreen.PROFILE) }
         )
         SentinelScreen.NOTIFICATIONS -> SentinelNotificationsScreen(
-            onBack = { onNavigate(SentinelScreen.PROFILE) }
+            onBack = onPop
         )
         SentinelScreen.PRIVACY_POLICY -> SentinelPrivacyPolicyScreen(
             onBack = { onNavigate(SentinelScreen.PRIVACY) }
