@@ -133,6 +133,8 @@ private fun SentinelAppContent() {
     val currentRoute = backStackEntry?.destination?.route
 
     val readAloud by AccessibilityStore.state.map { it.readAloud }.collectAsState(initial = false)
+    val reduceMotion by AccessibilityStore.state.map { it.reduceAnimations }.collectAsState(initial = false)
+    val transitionMs = if (reduceMotion) 0 else NAV_TRANSITION_MS
     LaunchedEffect(currentRoute, readAloud) {
         val title = screenTitle(currentRoute)
         if (readAloud && title != null) SentinelSpeaker.speak(context.getString(title))
@@ -157,13 +159,13 @@ private fun SentinelAppContent() {
         startDestination = SentinelScreen.SPLASH.name,
         modifier = Modifier.fillMaxSize(),
         enterTransition = {
-            fadeIn(tween(NAV_TRANSITION_MS)) + slideInHorizontally(tween(NAV_TRANSITION_MS)) { it / NAV_SLIDE_DIVISOR }
+            fadeIn(tween(transitionMs)) + slideInHorizontally(tween(transitionMs)) { it / NAV_SLIDE_DIVISOR }
         },
-        exitTransition = { fadeOut(tween(NAV_TRANSITION_MS)) },
-        popEnterTransition = { fadeIn(tween(NAV_TRANSITION_MS)) },
+        exitTransition = { fadeOut(tween(transitionMs)) },
+        popEnterTransition = { fadeIn(tween(transitionMs)) },
         popExitTransition = {
-            fadeOut(tween(NAV_TRANSITION_MS)) +
-                slideOutHorizontally(tween(NAV_TRANSITION_MS)) { it / NAV_SLIDE_DIVISOR }
+            fadeOut(tween(transitionMs)) +
+                slideOutHorizontally(tween(transitionMs)) { it / NAV_SLIDE_DIVISOR }
         }
     ) {
         SentinelScreen.entries.forEach { screen ->
