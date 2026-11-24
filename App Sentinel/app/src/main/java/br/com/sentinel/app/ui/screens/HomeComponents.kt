@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -47,7 +46,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.sentinel.app.R
@@ -67,36 +65,36 @@ import br.com.sentinel.app.ui.theme.SentinelYellow
 private const val MESSAGE_LIMIT = 4000
 
 @Composable
-internal fun BoxScope.HomeBackgroundShapes(screenWidth: Dp, screenHeight: Dp) {
+internal fun BoxScope.HomeBackgroundShapes() {
     Box(
         modifier = Modifier
             .align(Alignment.TopEnd)
-            .offset(x = screenWidth * 0.2f, y = screenHeight * 0.1f)
-            .size(screenWidth * 0.535f)
+            .offset(x = 85.dp, y = 90.dp)
+            .size(220.dp)
             .rotate(20f)
             .border(1.dp, SentinelYellow, RoundedCornerShape(36.dp))
     )
     Box(
         modifier = Modifier
             .align(Alignment.TopEnd)
-            .offset(x = screenWidth * 0.27f, y = screenHeight * 0.13f)
-            .size(screenWidth * 0.535f)
+            .offset(x = 110.dp, y = 110.dp)
+            .size(220.dp)
             .rotate(20f)
             .background(SentinelYellow, RoundedCornerShape(36.dp))
     )
     Box(
         modifier = Modifier
             .align(Alignment.CenterStart)
-            .offset(x = -(screenWidth * 0.36f), y = screenHeight * 0.1f)
-            .size(screenWidth * 0.88f)
+            .offset(x = (-150).dp, y = 90.dp)
+            .size(360.dp)
             .rotate(-55f)
             .border(1.dp, SentinelTeal, RoundedCornerShape(56.dp))
     )
     Box(
         modifier = Modifier
             .align(Alignment.CenterStart)
-            .offset(x = -(screenWidth * 0.32f), y = screenHeight * 0.1f)
-            .size(screenWidth * 0.8f)
+            .offset(x = (-130).dp, y = 90.dp)
+            .size(330.dp)
             .rotate(-55f)
             .background(SentinelMint, RoundedCornerShape(48.dp))
     )
@@ -222,8 +220,9 @@ private fun AnalysisCardHeader() {
             Text(
                 text = stringResource(R.string.recebeu_uma_mensagem_suspeita),
                 color = Color.Black,
-                fontSize = 15.sp,
-                fontWeight = FontWeight.Bold
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                maxLines = 1
             )
             Text(
                 text = stringResource(R.string.cole_o_texto_do_sms_ou_do_e_mail_ou_an),
@@ -239,7 +238,7 @@ private fun MessageField(message: String, onMessageChange: (String) -> Unit, onP
     Box(modifier = Modifier.fillMaxWidth()) {
         OutlinedTextField(
             value = message,
-            onValueChange = { if (it.length <= MESSAGE_LIMIT) onMessageChange(it) },
+            onValueChange = { onMessageChange(it.take(MESSAGE_LIMIT)) },
             placeholder = {
                 Text(stringResource(R.string.cole_sua_mensagem_aqui), color = Color.LightGray)
             },
@@ -250,7 +249,7 @@ private fun MessageField(message: String, onMessageChange: (String) -> Unit, onP
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(min = 140.dp, max = 220.dp)
+                .height(180.dp)
         )
         Text(
             text = "${message.length}/$MESSAGE_LIMIT",

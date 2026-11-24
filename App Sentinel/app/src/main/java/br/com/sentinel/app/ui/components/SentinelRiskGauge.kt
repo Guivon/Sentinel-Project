@@ -75,7 +75,7 @@ internal fun SentinelRiskGauge(score: Int, mainColor: Color = SentinelRiskRed, m
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "/100",
+                text = "${animatedScore.roundToInt()}/100",
                 color = SentinelTextStrong,
                 fontSize = 14.sp
             )

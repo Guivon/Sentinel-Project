@@ -20,28 +20,43 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronLeft
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Error
+import androidx.compose.material.icons.filled.EventBusy
+import androidx.compose.material.icons.filled.Link
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Payments
+import androidx.compose.material.icons.filled.PersonOff
+import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.sentinel.app.R
+import br.com.sentinel.app.data.AccessibilityStore
 import br.com.sentinel.app.domain.RiskLevel
 import br.com.sentinel.app.domain.ScamDetector
+import br.com.sentinel.app.ui.SentinelSpeaker
 import br.com.sentinel.app.ui.components.SentinelRiskGauge
 import br.com.sentinel.app.ui.theme.SentinelAmber
 import br.com.sentinel.app.ui.theme.SentinelBlueBg
 import br.com.sentinel.app.ui.theme.SentinelDivider
 import br.com.sentinel.app.ui.theme.SentinelPeriwinkleStrong
+import br.com.sentinel.app.ui.theme.SentinelRiskPink
 import br.com.sentinel.app.ui.theme.SentinelRiskRed
 import br.com.sentinel.app.ui.theme.SentinelTeal
 import br.com.sentinel.app.ui.theme.SentinelTextBody
@@ -50,6 +65,7 @@ import br.com.sentinel.app.ui.theme.SentinelTextMuted
 import br.com.sentinel.app.ui.theme.SentinelTextStrong
 import br.com.sentinel.app.ui.theme.SentinelTheme
 import br.com.sentinel.app.ui.theme.SentinelYellow
+import kotlinx.coroutines.flow.map
 
 @Preview(showBackground = true, name = "Resultado da Análise")
 @Composable
@@ -122,6 +138,21 @@ private fun riskPresentation(level: RiskLevel, analyzingAi: Boolean, hasReasons:
 }
 
 @Composable
+private fun resultSpeech(risk: RiskPresentation, score: Int, reasons: List<String>): String {
+    val parts = mutableListOf(
+        risk.label,
+        risk.title,
+        risk.description,
+        stringResource(R.string.result_speech_score, score)
+    )
+    if (reasons.isNotEmpty()) {
+        parts.add(stringResource(R.string.result_speech_reasons))
+        parts.addAll(reasons)
+    }
+    return parts.joinToString(". ")
+}
+
+@Composable
 fun SentinelAnalysisResultScreen(
     result: ScamDetector.DetectionResult?,
     originalContent: String,
@@ -133,6 +164,11 @@ fun SentinelAnalysisResultScreen(
     val score = (result?.score ?: 0).coerceIn(0, 100)
     val reasons = result?.reasons ?: emptyList()
     val risk = riskPresentation(level, analyzingAi, reasons.isNotEmpty())
+    val readAloud by AccessibilityStore.state.map { it.readAloud }.collectAsState(initial = false)
+    val spokenResult = if (analyzingAi) null else resultSpeech(risk, score, reasons)
+    LaunchedEffect(spokenResult, readAloud) {
+        if (readAloud && spokenResult != null) SentinelSpeaker.speak(spokenResult)
+    }
 
     Column(
         modifier = Modifier
@@ -300,35 +336,102 @@ private fun ReasonsCard(reasons: List<String>, accent: Color) {
     }
 }
 
+private enum class ReasonKind(
+    val icon: ImageVector,
+    val titleRes: Int,
+    val descriptionRes: Int?,
+    val keywords: List<String>
+) {
+    LINK(
+        Icons.Default.Link,
+        R.string.reason_title_link,
+        R.string.reason_desc_link,
+        listOf("link", "site", "domín")
+    ),
+    URGENCY(
+        Icons.Default.Schedule,
+        R.string.reason_title_urgency,
+        R.string.reason_desc_urgency,
+        listOf("urgên", "urgen", "prazo")
+    ),
+    DATA(
+        Icons.Default.Lock,
+        R.string.reason_title_data,
+        R.string.reason_desc_data,
+        listOf("dado", "senha", "sensív")
+    ),
+    WRITING(
+        Icons.Default.Edit,
+        R.string.reason_title_writing,
+        R.string.reason_desc_writing,
+        listOf("erro", "escrita", "gramát")
+    ),
+    PAYMENT(
+        Icons.Default.Payments,
+        R.string.reason_title_payment,
+        null,
+        listOf("débito", "cobrança", "pagamento", "pix", "boleto")
+    ),
+    SENDER(
+        Icons.Default.PersonOff,
+        R.string.reason_title_sender,
+        null,
+        listOf("número", "remetente", "contato", "oficial")
+    ),
+    DATE(
+        Icons.Default.EventBusy,
+        R.string.reason_title_date,
+        null,
+        listOf("data", "impossível", "inconsist")
+    ),
+    OTHER(Icons.Default.Error, R.string.reason_title_other, null, emptyList())
+}
+
+private fun reasonKind(reason: String): ReasonKind {
+    val text = reason.lowercase()
+    return ReasonKind.entries.firstOrNull { kind -> kind.keywords.any { text.contains(it) } } ?: ReasonKind.OTHER
+}
+
 @Composable
 private fun ReasonRow(reason: String, accent: Color) {
+    val kind = reasonKind(reason)
+    val shape = RoundedCornerShape(12.dp)
+    val background = if (accent == SentinelRiskRed) SentinelRiskPink else accent.copy(alpha = 0.15f)
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, SentinelDivider, RoundedCornerShape(12.dp))
+            .background(background, shape)
+            .border(1.dp, accent.copy(alpha = 0.25f), shape)
             .padding(10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
             modifier = Modifier
-                .size(36.dp)
-                .background(accent.copy(alpha = 0.15f), RoundedCornerShape(8.dp)),
+                .size(40.dp)
+                .background(accent, RoundedCornerShape(8.dp)),
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                imageVector = Icons.Default.Warning,
+                imageVector = kind.icon,
                 contentDescription = null,
-                tint = accent,
-                modifier = Modifier.size(20.dp)
+                tint = Color.White,
+                modifier = Modifier.size(22.dp)
             )
         }
         Spacer(modifier = Modifier.width(12.dp))
-        Text(
-            text = reason,
-            color = SentinelTextDark,
-            fontSize = 13.sp,
-            fontWeight = FontWeight.Medium
-        )
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = stringResource(kind.titleRes),
+                color = accent,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = kind.descriptionRes?.let { stringResource(it) } ?: reason,
+                color = SentinelTextDark,
+                fontSize = 13.sp
+            )
+        }
     }
 }
 

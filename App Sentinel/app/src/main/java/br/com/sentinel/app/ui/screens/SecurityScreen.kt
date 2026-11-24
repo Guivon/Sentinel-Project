@@ -17,7 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -110,11 +110,11 @@ fun SentinelSecurityScreen(
                 .padding(20.dp)
         ) {
             Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                imageVector = Icons.Default.ChevronLeft,
                 contentDescription = stringResource(R.string.voltar),
                 tint = Color.White,
                 modifier = Modifier
-                    .size(28.dp)
+                    .size(36.dp)
                     .clickable { onBack() }
             )
 

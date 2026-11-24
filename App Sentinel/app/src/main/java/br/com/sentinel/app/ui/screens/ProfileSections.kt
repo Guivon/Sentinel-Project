@@ -1,7 +1,5 @@
 package br.com.sentinel.app.ui.screens
 
-import android.content.Intent
-import android.provider.Settings
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -96,6 +94,37 @@ internal fun ProfileAccordion(
 }
 
 @Composable
+internal fun ProfileLinkRow(icon: ImageVector, title: String, onClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(vertical = 14.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = SentinelDarkBlueButton,
+            modifier = Modifier.size(24.dp)
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Text(
+            text = title,
+            color = SentinelDarkBlueButton,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium,
+            modifier = Modifier.weight(1f)
+        )
+        Icon(
+            imageVector = Icons.Default.KeyboardArrowRight,
+            contentDescription = null,
+            tint = SentinelDarkBlueButton
+        )
+    }
+}
+
+@Composable
 private fun ProfileInfoRow(
     title: String,
     description: String,
@@ -120,17 +149,7 @@ private fun ProfileInfoRow(
 }
 
 @Composable
-private fun ChevronTrailing() {
-    Icon(
-        imageVector = Icons.Default.KeyboardArrowRight,
-        contentDescription = null,
-        tint = SentinelDarkBlueButton,
-        modifier = Modifier.size(16.dp)
-    )
-}
-
-@Composable
-internal fun AccessibilitySection(permissions: ProtectionPermissions) {
+internal fun SystemPermissionsSection(permissions: ProtectionPermissions) {
     val context = LocalContext.current
 
     SentinelPermissionItem(
@@ -206,42 +225,6 @@ internal fun AccessibilitySection(permissions: ProtectionPermissions) {
         onEnable = permissions.requestCallProtection,
         onDisable = permissions.openCallSettings
     )
-}
-
-@Composable
-internal fun PrivacySection(onOpenPolicy: () -> Unit) {
-    val context = LocalContext.current
-    ProfileInfoRow(
-        title = stringResource(R.string.politica_de_privacidade_e_lgpd),
-        description = stringResource(R.string.veja_como_os_seus_dados_sao_tratados_e),
-        onClick = onOpenPolicy
-    ) {
-        ChevronTrailing()
-    }
-    ProfileInfoRow(
-        title = stringResource(R.string.permissoes_de_privacidade_do_sistema),
-        description = stringResource(R.string.gerir_camara_microfone_e_acessos_conce),
-        onClick = { context.startActivity(Intent(Settings.ACTION_PRIVACY_SETTINGS)) }
-    ) {
-        ChevronTrailing()
-    }
-}
-
-@Composable
-internal fun NotificationsSection() {
-    val context = LocalContext.current
-    ProfileInfoRow(
-        title = stringResource(R.string.gerir_canais_de_notificacoes),
-        description = stringResource(R.string.configurar_sons_pop_ups_e_permissoes_n),
-        onClick = {
-            val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
-                putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
-            }
-            context.startActivity(intent)
-        }
-    ) {
-        ChevronTrailing()
-    }
 }
 
 @Composable

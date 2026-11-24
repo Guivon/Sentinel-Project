@@ -16,10 +16,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.HelpOutline
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Accessibility
+import androidx.compose.material.icons.filled.AdminPanelSettings
 import androidx.compose.material.icons.filled.ChevronLeft
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Button
@@ -65,7 +66,7 @@ fun SentinelProfileScreenPreview() {
     }
 }
 
-private enum class ProfileSection { ACCESSIBILITY, PRIVACY, NOTIFICATIONS, ABOUT }
+private enum class ProfileSection { SYSTEM_PERMISSIONS }
 
 @Composable
 fun SentinelProfileScreen(onLogout: () -> Unit, onBack: () -> Unit = {}, onNavigate: (SentinelScreen) -> Unit = {}) {
@@ -135,7 +136,10 @@ fun SentinelProfileScreen(onLogout: () -> Unit, onBack: () -> Unit = {}, onNavig
                 expanded = expanded,
                 onToggle = { toggle(it) },
                 permissions = permissions,
-                onOpenPolicy = { onNavigate(SentinelScreen.PRIVACY_POLICY) }
+                onOpenPrivacy = { onNavigate(SentinelScreen.PRIVACY) },
+                onOpenNotifications = { onNavigate(SentinelScreen.NOTIFICATIONS) },
+                onOpenHelp = { onNavigate(SentinelScreen.HELP) },
+                onOpenAccessibility = { onNavigate(SentinelScreen.ACCESSIBILITY) }
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -220,7 +224,10 @@ private fun ProfileSettingsCard(
     expanded: Set<ProfileSection>,
     onToggle: (ProfileSection) -> Unit,
     permissions: ProtectionPermissions,
-    onOpenPolicy: () -> Unit
+    onOpenPrivacy: () -> Unit,
+    onOpenNotifications: () -> Unit,
+    onOpenHelp: () -> Unit,
+    onOpenAccessibility: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -228,43 +235,41 @@ private fun ProfileSettingsCard(
             .background(Color.White, RoundedCornerShape(20.dp))
             .padding(horizontal = 16.dp, vertical = 4.dp)
     ) {
-        ProfileAccordion(
+        ProfileLinkRow(
             icon = Icons.Default.Accessibility,
             title = stringResource(R.string.acessibilidade),
-            expanded = ProfileSection.ACCESSIBILITY in expanded,
-            onToggle = { onToggle(ProfileSection.ACCESSIBILITY) }
-        ) {
-            AccessibilitySection(permissions)
-        }
+            onClick = onOpenAccessibility
+        )
         HorizontalDivider(color = SentinelDivider)
 
-        ProfileAccordion(
+        ProfileLinkRow(
             icon = Icons.Default.Lock,
             title = stringResource(R.string.privacidade),
-            expanded = ProfileSection.PRIVACY in expanded,
-            onToggle = { onToggle(ProfileSection.PRIVACY) }
-        ) {
-            PrivacySection(onOpenPolicy = onOpenPolicy)
-        }
+            onClick = onOpenPrivacy
+        )
         HorizontalDivider(color = SentinelDivider)
 
-        ProfileAccordion(
+        ProfileLinkRow(
             icon = Icons.Default.Notifications,
             title = stringResource(R.string.notificacoes),
-            expanded = ProfileSection.NOTIFICATIONS in expanded,
-            onToggle = { onToggle(ProfileSection.NOTIFICATIONS) }
-        ) {
-            NotificationsSection()
-        }
+            onClick = onOpenNotifications
+        )
+        HorizontalDivider(color = SentinelDivider)
+
+        ProfileLinkRow(
+            icon = Icons.AutoMirrored.Filled.HelpOutline,
+            title = stringResource(R.string.central_de_ajuda),
+            onClick = onOpenHelp
+        )
         HorizontalDivider(color = SentinelDivider)
 
         ProfileAccordion(
-            icon = Icons.Default.Info,
-            title = stringResource(R.string.sobre_o_sentinel),
-            expanded = ProfileSection.ABOUT in expanded,
-            onToggle = { onToggle(ProfileSection.ABOUT) }
+            icon = Icons.Default.AdminPanelSettings,
+            title = stringResource(R.string.permissoes_do_sistema),
+            expanded = ProfileSection.SYSTEM_PERMISSIONS in expanded,
+            onToggle = { onToggle(ProfileSection.SYSTEM_PERMISSIONS) }
         ) {
-            AboutSection()
+            SystemPermissionsSection(permissions)
         }
     }
 }

@@ -183,7 +183,7 @@ internal fun ReportScamDialog(
                 Spacer(modifier = Modifier.height(12.dp))
                 OutlinedTextField(
                     value = description,
-                    onValueChange = { if (it.length <= REPORT_MAX_LENGTH) description = it },
+                    onValueChange = { description = it.take(REPORT_MAX_LENGTH) },
                     label = { Text(stringResource(R.string.o_que_aconteceu)) },
                     minLines = 3,
                     maxLines = 6,
@@ -192,7 +192,7 @@ internal fun ReportScamDialog(
                 Spacer(modifier = Modifier.height(8.dp))
                 OutlinedTextField(
                     value = region,
-                    onValueChange = { if (it.length <= REGION_MAX_LENGTH) region = it },
+                    onValueChange = { region = it.take(REGION_MAX_LENGTH) },
                     label = { Text(stringResource(R.string.cidade_uf_opcional)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
