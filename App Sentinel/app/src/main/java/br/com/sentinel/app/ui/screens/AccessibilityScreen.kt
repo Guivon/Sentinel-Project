@@ -38,6 +38,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -272,11 +275,13 @@ private fun TextAndVisualCard(state: AccessibilityState) {
 
 @Composable
 private fun TextSizeSlider(value: Float) {
+    var dragValue by remember(value) { mutableFloatStateOf(value) }
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text("A", color = SentinelDarkBlueButton, fontSize = 14.sp, fontWeight = FontWeight.Bold)
         Slider(
-            value = value,
-            onValueChange = { next -> AccessibilityStore.update { it.copy(textSize = next) } },
+            value = dragValue,
+            onValueChange = { dragValue = it },
+            onValueChangeFinished = { AccessibilityStore.update { it.copy(textSize = dragValue) } },
             colors = SliderDefaults.colors(
                 thumbColor = SentinelDarkBlueButton,
                 activeTrackColor = SentinelDarkBlueButton,

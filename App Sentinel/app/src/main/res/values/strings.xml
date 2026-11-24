@@ -53,7 +53,7 @@
     <string name="conte_com_a_ia_para_te">"Conte com a IA para\nte "</string>
     <string name="de_golpes">" de\ngolpes."</string>
     <string name="recebeu_uma_mensagem_suspeita">Recebeu uma mensagem suspeita?</string>
-    <string name="cole_o_texto_do_sms_ou_do_e_mail_ou_an">Cole o texto do SMS ou do e-mail, ou anexe uma imagem ou PDF, e deixe a IA analisar para você.</string>
+    <string name="cole_o_texto_do_sms_ou_do_e_mail_ou_an">Cole o texto do SMS ou do e-mail, ou anexe um arquivo, e deixe a IA analisar para você</string>
     <string name="cole_sua_mensagem_aqui">Cole sua mensagem aqui.</string>
     <string name="anexar_imagem_ou_pdf">Anexar imagem ou PDF</string>
     <string name="remover_anexo">Remover anexo</string>

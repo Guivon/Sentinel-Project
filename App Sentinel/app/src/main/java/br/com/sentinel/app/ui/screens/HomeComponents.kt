@@ -229,7 +229,8 @@ private fun AnalysisCardHeader() {
             Text(
                 text = stringResource(R.string.cole_o_texto_do_sms_ou_do_e_mail_ou_an),
                 color = SentinelLightBlueCard,
-                fontSize = 16.sp
+                fontSize = 14.sp,
+                lineHeight = 15.sp
             )
         }
     }
