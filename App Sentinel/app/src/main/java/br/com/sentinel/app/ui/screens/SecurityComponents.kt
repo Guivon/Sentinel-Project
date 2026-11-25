@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialog
@@ -40,6 +39,7 @@ import br.com.sentinel.app.data.CommunityApi
 import br.com.sentinel.app.data.GmailHelper
 import br.com.sentinel.app.services.PermissionsHelper
 import br.com.sentinel.app.ui.components.SentinelAlertItem
+import br.com.sentinel.app.ui.icons.ChevronRight
 import br.com.sentinel.app.ui.theme.SentinelAqua
 import br.com.sentinel.app.ui.theme.SentinelBlueBg
 import br.com.sentinel.app.ui.theme.SentinelRiskRed

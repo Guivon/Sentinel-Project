@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -39,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import br.com.sentinel.app.R
 import br.com.sentinel.app.data.AvatarStore
 import br.com.sentinel.app.ui.components.UserAvatar
+import br.com.sentinel.app.ui.icons.PhotoCamera
 import br.com.sentinel.app.ui.theme.SentinelBlueBg
 import br.com.sentinel.app.ui.theme.SentinelYellow
 import kotlinx.coroutines.launch

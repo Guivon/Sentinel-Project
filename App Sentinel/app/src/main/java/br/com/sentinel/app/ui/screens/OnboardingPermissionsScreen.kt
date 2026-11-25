@@ -17,8 +17,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material.icons.filled.Sms
-import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -38,6 +36,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.sentinel.app.R
 import br.com.sentinel.app.data.markOnboardingCompleted
+import br.com.sentinel.app.ui.icons.Sms
+import br.com.sentinel.app.ui.icons.Visibility
 import br.com.sentinel.app.ui.rememberProtectionPermissions
 import br.com.sentinel.app.ui.theme.SentinelBlueBg
 import br.com.sentinel.app.ui.theme.SentinelLightBlueCard

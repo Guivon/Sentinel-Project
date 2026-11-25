@@ -16,11 +16,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.HelpOutline
-import androidx.compose.material.icons.automirrored.filled.Logout
-import androidx.compose.material.icons.filled.Accessibility
-import androidx.compose.material.icons.filled.AdminPanelSettings
-import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Button
@@ -51,6 +46,11 @@ import br.com.sentinel.app.ui.AlertsViewModel
 import br.com.sentinel.app.ui.ProtectionPermissions
 import br.com.sentinel.app.ui.SentinelScreen
 import br.com.sentinel.app.ui.components.SentinelBottomNavigationBar
+import br.com.sentinel.app.ui.icons.Accessibility
+import br.com.sentinel.app.ui.icons.AdminPanelSettings
+import br.com.sentinel.app.ui.icons.ChevronLeft
+import br.com.sentinel.app.ui.icons.HelpOutline
+import br.com.sentinel.app.ui.icons.Logout
 import br.com.sentinel.app.ui.rememberProtectionPermissions
 import br.com.sentinel.app.ui.theme.SentinelBlueBg
 import br.com.sentinel.app.ui.theme.SentinelDivider

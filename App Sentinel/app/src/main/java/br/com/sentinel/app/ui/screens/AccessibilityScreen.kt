@@ -22,13 +22,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Accessibility
-import androidx.compose.material.icons.filled.ChevronLeft
-import androidx.compose.material.icons.filled.Palette
-import androidx.compose.material.icons.filled.RemoveRedEye
-import androidx.compose.material.icons.filled.Smartphone
-import androidx.compose.material.icons.filled.VerifiedUser
-import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
@@ -57,6 +50,13 @@ import br.com.sentinel.app.data.AccessibilityState
 import br.com.sentinel.app.data.AccessibilityStore
 import br.com.sentinel.app.data.ColorBlindMode
 import br.com.sentinel.app.ui.SentinelSpeaker
+import br.com.sentinel.app.ui.icons.Accessibility
+import br.com.sentinel.app.ui.icons.ChevronLeft
+import br.com.sentinel.app.ui.icons.Palette
+import br.com.sentinel.app.ui.icons.RemoveRedEye
+import br.com.sentinel.app.ui.icons.Smartphone
+import br.com.sentinel.app.ui.icons.VerifiedUser
+import br.com.sentinel.app.ui.icons.VolumeUp
 import br.com.sentinel.app.ui.theme.SentinelBlueBg
 import br.com.sentinel.app.ui.theme.SentinelBorderLight
 import br.com.sentinel.app.ui.theme.SentinelDarkBlueButton

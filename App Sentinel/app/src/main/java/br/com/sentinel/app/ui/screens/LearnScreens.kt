@@ -18,12 +18,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ChevronLeft
-import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.outlined.Cancel
-import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -41,6 +36,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.sentinel.app.R
+import br.com.sentinel.app.ui.icons.Cancel
+import br.com.sentinel.app.ui.icons.ChevronLeft
+import br.com.sentinel.app.ui.icons.ChevronRight
+import br.com.sentinel.app.ui.icons.Fingerprint
+import br.com.sentinel.app.ui.icons.StarBorder
 import br.com.sentinel.app.ui.theme.SentinelBlueBg
 import br.com.sentinel.app.ui.theme.SentinelLightBlueCard
 import br.com.sentinel.app.ui.theme.SentinelPaleBlueAlt

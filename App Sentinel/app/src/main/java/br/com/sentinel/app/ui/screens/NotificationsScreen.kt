@@ -19,10 +19,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBalance
-import androidx.compose.material.icons.filled.Campaign
-import androidx.compose.material.icons.filled.ChevronLeft
-import androidx.compose.material.icons.filled.GppMaybe
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.HorizontalDivider
@@ -40,6 +36,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.sentinel.app.R
+import br.com.sentinel.app.ui.icons.AccountBalance
+import br.com.sentinel.app.ui.icons.Campaign
+import br.com.sentinel.app.ui.icons.ChevronLeft
+import br.com.sentinel.app.ui.icons.GppMaybe
 import br.com.sentinel.app.ui.theme.SentinelBlueBg
 import br.com.sentinel.app.ui.theme.SentinelDarkBlueButton
 import br.com.sentinel.app.ui.theme.SentinelDivider

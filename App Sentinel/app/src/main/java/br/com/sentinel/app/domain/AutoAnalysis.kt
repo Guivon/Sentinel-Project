@@ -21,7 +21,8 @@ object AutoAnalysis {
         historyContent: String = content,
         officialInstitution: String? = null,
         extraSigns: List<Pair<String, Int>> = emptyList(),
-        sender: SenderContext? = null
+        sender: SenderContext? = null,
+        useAi: Boolean = false
     ) {
         val signs = extraSigns + senderSigns(content, sender) + OfficialContacts.lookalikeSigns(content)
         val local = ScamDetector.analyze(content, signs)
@@ -41,8 +42,12 @@ object AutoAnalysis {
             return
         }
 
-        val response = withTimeoutOrNull(AI_TIMEOUT_MS) {
-            SentinelApi.analyze(backendApp, content, appScore = local.score, sender = sender)
+        val response = if (useAi) {
+            withTimeoutOrNull(AI_TIMEOUT_MS) {
+                SentinelApi.analyze(backendApp, content, appScore = local.score, sender = sender)
+            }
+        } else {
+            null
         }
         val final = if (response != null) {
             ScamDetector.DetectionResult(response.appLevel(), response.aiScore, response.reasons)

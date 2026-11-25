@@ -9,7 +9,6 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -21,6 +20,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -30,8 +30,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
@@ -76,6 +74,8 @@ import br.com.sentinel.app.ui.components.GoogleSignInButton
 import br.com.sentinel.app.ui.components.SentinelCornerRibbon
 import br.com.sentinel.app.ui.components.SentinelCornerRibbonTop
 import br.com.sentinel.app.ui.components.SentinelLogo
+import br.com.sentinel.app.ui.icons.Visibility
+import br.com.sentinel.app.ui.icons.VisibilityOff
 import br.com.sentinel.app.ui.theme.SentinelBlueBg
 import br.com.sentinel.app.ui.theme.SentinelDarkBlueButton
 import br.com.sentinel.app.ui.theme.SentinelLightBlueCard
@@ -169,26 +169,34 @@ fun SentinelWelcomeScreen(onSignIn: () -> Unit, onRegister: () -> Unit, onGoogle
             .fillMaxSize()
             .background(SentinelYellow)
     ) {
-        WelcomeRibbons(screenWidth = maxWidth, screenHeight = maxHeight)
+        val contentWidth = minOf(maxWidth, WELCOME_MAX_WIDTH)
+        val textScale = minOf(contentWidth.value / 360f, maxHeight.value / 800f).coerceIn(0.85f, 1.15f)
+        val logoSide = minOf(contentWidth * 0.514f, maxHeight * 0.24f, WELCOME_MAX_LOGO)
+        val logoTop = maxHeight * 0.147f
+        val textTop = maxHeight * 0.405f
+        WelcomeRibbons(screenWidth = contentWidth, screenHeight = maxHeight)
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 24.dp, vertical = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .align(Alignment.TopCenter)
+                .widthIn(max = WELCOME_MAX_WIDTH)
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 24.dp)
         ) {
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                SentinelLogo(modifier = Modifier.fillMaxSize())
-            }
-            WelcomeTexts()
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(logoTop))
+            SentinelLogo(modifier = Modifier.size(logoSide).align(Alignment.CenterHorizontally))
+            Spacer(modifier = Modifier.height((textTop - logoTop - logoSide).coerceAtLeast(12.dp)))
+            WelcomeTexts(textScale)
+            Spacer(modifier = Modifier.height(28.dp))
             WelcomeActions(onSignIn, onRegister, onGoogleClick)
-            Spacer(modifier = Modifier.height(16.dp))
+        }
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .widthIn(max = WELCOME_MAX_WIDTH)
+                .fillMaxWidth()
+                .padding(start = 24.dp, end = 24.dp, bottom = maxHeight * 0.045f)
+        ) {
             WelcomeFooter()
         }
     }
@@ -202,7 +210,7 @@ private fun BoxScope.WelcomeRibbons(screenWidth: Dp, screenHeight: Dp) {
         modifier = Modifier
             .size(ribbonSize)
             .align(Alignment.BottomStart)
-            .offset(x = -(screenWidth * 0.05f), y = -(screenHeight * 0.2f))
+            .offset(x = -(screenWidth * 0.05f), y = -(screenHeight * 0.175f))
     )
 
     SentinelCornerRibbonTop(
@@ -210,19 +218,19 @@ private fun BoxScope.WelcomeRibbons(screenWidth: Dp, screenHeight: Dp) {
             .size(ribbonSize)
             .align(Alignment.TopEnd)
             .graphicsLayer(scaleX = -1f)
-            .offset(x = -(screenWidth * 0.05f), y = screenHeight * 0.33f)
+            .offset(x = -(screenWidth * 0.05f), y = screenHeight * 0.307f)
     )
 }
 
 @Composable
-private fun WelcomeTexts() {
+private fun WelcomeTexts(textScale: Float) {
     Column(
         horizontalAlignment = Alignment.Start,
         modifier = Modifier.fillMaxWidth()
     ) {
         Text(
             text = stringResource(R.string.bem_vindo_ao_sentinel),
-            fontSize = 25.sp,
+            fontSize = (22.5f * textScale).sp,
             fontWeight = FontWeight.Bold,
             color = SentinelLightBlueCard,
             textAlign = TextAlign.Left
@@ -230,7 +238,8 @@ private fun WelcomeTexts() {
         Spacer(modifier = Modifier.height(10.dp))
         Text(
             text = stringResource(R.string.para_continuar_acesse_sua_conta_do_ban),
-            fontSize = 24.sp,
+            fontSize = (22.5f * textScale).sp,
+            lineHeight = (27.5f * textScale).sp,
             color = SentinelLightBlueCard.copy(alpha = 0.8f),
             textAlign = TextAlign.Left,
             modifier = Modifier.padding(horizontal = 1.dp)
@@ -310,6 +319,8 @@ private fun WelcomeFooter() {
 }
 
 private const val AUTH_TRANSITION_MS = 350
+private val WELCOME_MAX_WIDTH = 480.dp
+private val WELCOME_MAX_LOGO = 300.dp
 private const val LOGIN_PREFS = "sentinel_login"
 private const val REMEMBERED_EMAIL_KEY = "remembered_email"
 

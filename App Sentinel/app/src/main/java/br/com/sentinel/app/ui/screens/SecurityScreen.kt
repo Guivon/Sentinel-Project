@@ -17,8 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ChevronLeft
-import androidx.compose.material.icons.outlined.History
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -42,6 +40,8 @@ import br.com.sentinel.app.data.CommunityApi
 import br.com.sentinel.app.ui.SentinelScreen
 import br.com.sentinel.app.ui.components.SentinelBottomNavigationBar
 import br.com.sentinel.app.ui.components.SentinelReportCard
+import br.com.sentinel.app.ui.icons.ChevronLeft
+import br.com.sentinel.app.ui.icons.History
 import br.com.sentinel.app.ui.theme.SentinelBlueBg
 import br.com.sentinel.app.ui.theme.SentinelTheme
 import br.com.sentinel.app.ui.theme.SentinelYellow

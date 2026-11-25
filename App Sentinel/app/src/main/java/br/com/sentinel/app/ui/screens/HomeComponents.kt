@@ -18,14 +18,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AttachFile
-import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material.icons.outlined.Shield
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -51,6 +46,11 @@ import androidx.compose.ui.unit.sp
 import br.com.sentinel.app.R
 import br.com.sentinel.app.ui.AttachedFile
 import br.com.sentinel.app.ui.components.SentinelQuickCard
+import br.com.sentinel.app.ui.icons.AttachFile
+import br.com.sentinel.app.ui.icons.ChevronRight
+import br.com.sentinel.app.ui.icons.History
+import br.com.sentinel.app.ui.icons.MenuBook
+import br.com.sentinel.app.ui.icons.Shield
 import br.com.sentinel.app.ui.theme.SentinelBorderLight
 import br.com.sentinel.app.ui.theme.SentinelLightBlueCard
 import br.com.sentinel.app.ui.theme.SentinelMint

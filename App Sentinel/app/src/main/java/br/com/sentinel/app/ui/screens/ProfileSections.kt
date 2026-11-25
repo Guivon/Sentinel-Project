@@ -15,12 +15,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.ExpandLess
-import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material.icons.filled.Sms
-import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -42,6 +38,10 @@ import br.com.sentinel.app.R
 import br.com.sentinel.app.services.GmailCheckWorker
 import br.com.sentinel.app.ui.ProtectionPermissions
 import br.com.sentinel.app.ui.components.SentinelPermissionItem
+import br.com.sentinel.app.ui.icons.ExpandLess
+import br.com.sentinel.app.ui.icons.ExpandMore
+import br.com.sentinel.app.ui.icons.Sms
+import br.com.sentinel.app.ui.icons.Visibility
 import br.com.sentinel.app.ui.theme.SentinelDarkBlueButton
 import br.com.sentinel.app.ui.theme.SentinelLightBlueCard
 import br.com.sentinel.app.ui.theme.SentinelSurfaceMuted

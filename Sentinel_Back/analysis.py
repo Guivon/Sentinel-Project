@@ -12,6 +12,7 @@ import cnpj as cnpj_check
 import pix as pix_check
 from auth import require_token
 from config import supabase_url
+from learning import examples_block
 from limits import WindowLimiter
 
 logger = logging.getLogger("sentinel.analysis")
@@ -104,6 +105,11 @@ Responda SOMENTE com JSON, sem markdown, neste formato:
 "motivos": ["curto", "curto"], "recomendacao": "uma frase curta", \
 "cnpjs": ["somente números, se houver"]}
 Motivos em português, no máximo 4, cada um com menos de 12 palavras."""
+
+
+def _system_prompt() -> str:
+    examples = examples_block()
+    return SYSTEM_PROMPT + "\n\n" + examples if examples else SYSTEM_PROMPT
 
 
 def _strip_delimiters(text: str) -> str:
@@ -233,7 +239,7 @@ def _via_claude(app_origin: str, text: str, sender: dict[str, Any] | None) -> di
         json={
             "model": ANTHROPIC_MODEL,
             "max_tokens": 500,
-            "system": SYSTEM_PROMPT,
+            "system": _system_prompt(),
             "messages": [{"role": "user", "content": _build_message(app_origin, text, sender)}],
         },
         timeout=20,
@@ -279,7 +285,7 @@ def _via_bedrock(
 
     response = _bedrock_client().converse(
         modelId=BEDROCK_MODEL_ID,
-        system=[{"text": SYSTEM_PROMPT}],
+        system=[{"text": _system_prompt()}],
         messages=[{"role": "user", "content": content}],
         inferenceConfig={"maxTokens": 500, "temperature": 0},
     )

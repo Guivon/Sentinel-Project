@@ -15,7 +15,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -35,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import br.com.sentinel.app.R
 import br.com.sentinel.app.data.Alert
 import br.com.sentinel.app.ui.components.SentinelHistoryAlertCard
+import br.com.sentinel.app.ui.icons.ChevronLeft
 import br.com.sentinel.app.ui.theme.SentinelBlueBg
 import br.com.sentinel.app.ui.theme.SentinelTextBody
 import br.com.sentinel.app.ui.theme.SentinelTextHint

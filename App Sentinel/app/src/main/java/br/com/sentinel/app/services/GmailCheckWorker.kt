@@ -36,7 +36,8 @@ class GmailCheckWorker(context: Context, params: WorkerParameters) : CoroutineWo
                     content = "${email.subject} ${email.body}",
                     historyContent = email.subject,
                     officialInstitution = OfficialContacts.identify(email.sender),
-                    extraSigns = authenticationSigns(email.authentication)
+                    extraSigns = authenticationSigns(email.authentication),
+                    useAi = true
                 )
             }
 

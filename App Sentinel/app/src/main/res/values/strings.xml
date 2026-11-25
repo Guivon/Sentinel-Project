@@ -124,7 +124,7 @@
     <string name="s_2_quais_dados_usamos">2. Quais dados usamos</string>
     <string name="conta_seu_nome_e_mail_e_senha_a_senha">Conta: seu nome, e-mail e senha. A senha é guardada de forma protegida (criptografada) e não é lida por nós.</string>
     <string name="mensagens_que_voce_analisa_o_texto_que">Mensagens que você analisa: o texto que você cola e as imagens ou PDFs que você anexa são enviados ao servidor para a análise da inteligência artificial.</string>
-    <string name="mensagens_recebidas_sms_notificacoes_d">Mensagens recebidas (SMS, notificações do WhatsApp e e-mails do Gmail, se você conectar): são analisadas primeiro no seu aparelho. O texto só é enviado ao servidor quando o aparelho já encontrou sinais de golpe.</string>
+    <string name="mensagens_recebidas_sms_notificacoes_d">SMS e notificações do WhatsApp: são analisados somente no seu aparelho e nada é enviado. E-mails do Gmail (se você conectar): são analisados primeiro no aparelho, e o texto só é enviado ao servidor quando já há sinais de golpe.</string>
     <string name="texto_da_tela_se_voce_ativar_a_leitura">Texto da tela: se você ativar a leitura de tela, o texto visível de apps de mensagens, e-mail e navegadores é analisado apenas no aparelho e não é enviado ao servidor.</string>
     <string name="privacy_behavior_text">Comportamento e remetente: depois de uma mensagem muito suspeita, o aplicativo conta, no aparelho, a velocidade de digitação e as trocas de tela, sem guardar o que foi digitado. Só essas contagens, o número ou endereço de quem enviou e se ele está nos seus contatos são enviados para a análise, nunca o texto digitado. CNPJs citados na mensagem são consultados na Receita Federal pelo servidor, que não guarda o texto. Em imagens e PDFs que você anexa, o QR code Pix é lido no aparelho e só o código Pix (chave, nome do recebedor e valor) é enviado para conferir se bate com o CNPJ do documento.</string>
     <string name="contatos_usados_apenas_para_saber_se_o">Contatos: usados apenas para saber se o remetente já está na sua agenda. Eles não saem do aparelho.</string>
@@ -148,7 +148,7 @@
     <string name="a_comunicacao_entre_o_aplicativo_e_o_s">A comunicação entre o aplicativo e o servidor é criptografada (HTTPS).</string>
     <string name="cada_pedido_ao_servidor_exige_que_voce">Cada pedido ao servidor exige que você esteja logado, e cada usuário só acessa os próprios registros.</string>
     <string name="coletamos_o_minimo_necessario_o_texto">Coletamos o mínimo necessário: o texto das mensagens e os arquivos não ficam guardados no servidor por padrão.</string>
-    <string name="a_analise_de_sms_whatsapp_e_mails_e_te">A análise de SMS, WhatsApp, e-mails e tela começa no aparelho, para que só o necessário seja enviado.</string>
+    <string name="a_analise_de_sms_whatsapp_e_mails_e_te">A análise de SMS, WhatsApp e tela fica somente no aparelho. Só e-mails do Gmail com sinais de golpe e o que você mesmo envia ao app são enviados.</string>
     <string name="ha_limite_de_uso_por_pessoa_para_evita">Há limite de uso por pessoa para evitar abusos, e o acesso ao banco de dados é restrito.</string>
     <string name="s_6_seus_direitos_lgpd">6. Seus direitos (LGPD)</string>
     <string name="conforme_a_lei_geral_de_protecao_de_da">Conforme a Lei Geral de Proteção de Dados (Lei 13.709/2018), você pode a qualquer momento:</string>
@@ -284,7 +284,7 @@
     <string name="acc_read_aloud_on">Leitura em voz alta ativada</string>
     <string name="privacy_subtitle">Seus dados estão protegidos. Veja como o Sentinel utiliza suas informações:</string>
     <string name="privacy_messages_title">Suas mensagens</string>
-    <string name="privacy_messages_desc">O texto que você cola e os arquivos que anexa são enviados com segurança para a análise da inteligência artificial e não ficam guardados: o servidor não armazena o conteúdo das suas mensagens. SMS, notificações e e-mails são analisados primeiro no seu aparelho, e só o necessário é enviado.</string>
+    <string name="privacy_messages_desc">O texto que você cola e os arquivos que anexa são enviados com segurança para a análise da inteligência artificial e não ficam guardados: o servidor não armazena o conteúdo das suas mensagens. SMS e notificações são analisados somente no seu aparelho. E-mails do Gmail, se você conectar, só são enviados quando há sinais de golpe.</string>
     <string name="privacy_data_title">Seus dados</string>
     <string name="privacy_data_desc">Seu histórico de alertas e suas preferências ficam salvos só no seu aparelho. No servidor guardamos apenas o essencial: sua conta (nome e e-mail) e um registro de cada análise com o resultado e os motivos, nunca o texto. Não vendemos seus dados nem os usamos para publicidade.</string>
     <string name="privacy_rights_title">Tratamento de dados</string>
