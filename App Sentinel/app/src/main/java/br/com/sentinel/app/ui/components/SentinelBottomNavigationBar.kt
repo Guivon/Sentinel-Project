@@ -45,7 +45,7 @@ private fun Modifier.selectionLine(selected: Boolean): Modifier {
         val lineWidth = size.width * LINE_WIDTH_FRACTION * progress
         drawRoundRect(
             color = SentinelBlueBg,
-            topLeft = Offset((size.width - lineWidth) / 2, 0f),
+            topLeft = Offset((size.width - lineWidth) / 2, size.height - lineHeight),
             size = Size(lineWidth, lineHeight),
             cornerRadius = CornerRadius(lineHeight / 2)
         )
